@@ -15,10 +15,20 @@ class MigrationApp(QWidget):
     def initUI(self):
         self.setWindowTitle('Automated Migration Application')
 
+        # Set initial size of the window
+        self.resize(900, 500)  # Width: 900 pixels, Height: 500 pixels
+
         layout = QVBoxLayout()
 
         # Load the Excel file
-        self.df = pd.read_excel(self.excel_file)
+        try:
+            self.df = pd.read_excel(self.excel_file)
+        except FileNotFoundError:
+            QMessageBox.critical(self, 'Error', f'Excel file not found: {self.excel_file}')
+            return
+        except Exception as e:
+            QMessageBox.critical(self, 'Error', f'Failed to load Excel file.\nError: {str(e)}')
+            return
 
         # Create a QTableWidget
         self.table = QTableWidget()
@@ -48,33 +58,65 @@ class MigrationApp(QWidget):
         hostname = self.table.item(row, 0).text()
         username = self.table.item(row, 1).text()
         password = self.table.item(row, 2).text()
-        migration_script_path = r'C:\\Users\\sultan.m\\Desktop\\MigrationAutomation\\app\\scripts\\executor.py'
-
+        shared_dir = r'Z:\\Remote\\'
+        remote_dir = f'C:\\Users\\{username}\\Desktop\\Remote\\'
+        current_host_path = f"{shared_dir}current_host.txt"
+        with open(current_host_path,'w') as file:
+            file.write(hostname)
+        
         try:
             # Establish SSH connection
             ssh = paramiko.SSHClient()
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(hostname, username=username, password=password)
-            print('connected...')
-            print(os.getcwd())
-            hostname = socket.gethostname()
-            print(f'hostname: {hostname}')
+            print('Connected...')
+
+            try:
+                # Create the directory if it does not exist
+                stdin, stdout, stderr = ssh.exec_command(f'if not exist "{remote_dir}" mkdir "{remote_dir}"')
+                error = stderr.read().decode()
+                if error:
+                    raise Exception(error)
+            except Exception as e:
+                raise Exception(f'Failed to create directory on remote host: {str(e)}')
+
+            try:
+                # Transfer each file in the shared directory to the remote directory
+                sftp = ssh.open_sftp()
+                for file_name in os.listdir(shared_dir):
+                    local_file_path = os.path.join(shared_dir, file_name)
+                    remote_file_path = os.path.join(remote_dir, file_name)
+                    sftp.put(local_file_path, remote_file_path)
+                sftp.close()
+            except FileNotFoundError:
+                raise Exception(f'Local file not found in directory: {shared_dir}')
+            except Exception as e:
+                raise Exception(f'Failed to transfer files to remote host: {str(e)}')
+            
+            remote_python_script_path = f"{remote_dir}executor.py"
             # Execute the migration script
-            exec_command = f'python {migration_script_path}'
+            exec_command = f'python {remote_python_script_path}'
             stdin, stdout, stderr = ssh.exec_command(exec_command)
             output = stdout.read().decode()
             error = stderr.read().decode()
             if error:
+
                 raise Exception(error)
             
             ssh.close()
             QMessageBox.information(self, 'Success', f'Connected to {hostname} and executed the script successfully.\nOutput:\n{output}')
+        except paramiko.AuthenticationException:
+            QMessageBox.critical(self, 'Error', f'Authentication failed for {hostname}.')
+        except paramiko.SSHException as e:
+            QMessageBox.critical(self, 'Error', f'SSH error occurred while connecting to {hostname}.\nError: {str(e)}')
+        except socket.error as e:
+            QMessageBox.critical(self, 'Error', f'Network error occurred while connecting to {hostname}.\nError: {str(e)}')
         except Exception as e:
             QMessageBox.critical(self, 'Error', f'Failed to connect to {hostname}.\nError: {str(e)}')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    excel_file = r'Z:\PG Automation.xlsx'  # Path to your Excel file
+    excel_file = r'Z:\\Remote\\PG Automation.xlsx'  # Path to your Excel file
     ex = MigrationApp(excel_file)
     ex.show()
     sys.exit(app.exec_())

@@ -10,8 +10,9 @@ import argparse
 import pandas as pd
 import logging
 
+log_file_path = r'C:\Users\sultan.m\Desktop\Remote\migration.log'
 #configure logging
-logging.basicConfig(filename='migration.log',filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
+logging.basicConfig(filename=log_file_path,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 
 oracon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
 pgcon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\pgCon.txt'
@@ -381,7 +382,6 @@ def run_external_app(app_path):
                 logging.error(stderr.decode('utf-8'))
             else:
                 logging.info(f'{app_path} executed successfully.')
-
         else:
             logging.info('Unsupported OS.')
             return
@@ -392,15 +392,19 @@ def run_external_app(app_path):
 # Entry point for the application
 import socket
 if __name__ == '__main__':
-    excel_filepath = r'C:\Users\sultan.m\Desktop\MigrationAutomation\app\scripts\PG Automation.xlsx'
-    hostname = socket.gethostname()
-    credentials = load_credentials_from_excel(excel_filepath,hostname)
-    print(credentials)
+    excel_filepath = r'C:\Users\sultan.m\Desktop\Remote\PG Automation.xlsx'
+    # hostname = socket.gethostname()
+    hostname_filepath = r'C:\Users\sultan.m\Desktop\Remote\current_host.txt'
+    with open(hostname_filepath,'r') as f1:
+        current_hostname=f1.read()
+    credentials = load_credentials_from_excel(excel_filepath,current_hostname)
+    logging.info(f'credentials: {credentials}')
     update_connections(credentials)
-    app_paths = [migrationapp_path,audittriggerapp_path,comparetoolapp_path]
+    app_paths = [migrationapp_path,audittriggerapp_path]
     for app in app_paths:
         run_external_app(app)
-    print(credentials['pgDbName'])
+    print()
+    logging.info(f"credentials['pgDbName']: {credentials['pgDbName']}")
     updatePatchDrill(credentials['pgDbName'],patch_drill_path)
     updatePatchLive(credentials['pgDbName'],patch_live_path)
     executePatch(
