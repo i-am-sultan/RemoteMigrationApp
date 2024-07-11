@@ -2,6 +2,8 @@ import sys
 import pandas as pd
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QMessageBox, QHeaderView
 import paramiko
+import os
+import socket
 
 class MigrationApp(QWidget):
     def __init__(self, excel_file):
@@ -54,7 +56,9 @@ class MigrationApp(QWidget):
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(hostname, username=username, password=password)
             print('connected...')
-
+            print(os.getcwd())
+            hostname = socket.gethostname()
+            print(f'hostname: {hostname}')
             # Execute the migration script
             exec_command = f'python {migration_script_path}'
             stdin, stdout, stderr = ssh.exec_command(exec_command)
@@ -70,7 +74,7 @@ class MigrationApp(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    excel_file = r'C:\Users\sultan.m\Desktop\MigrationAutomation\app\scripts\PG Automation.xlsx'  # Path to your Excel file
+    excel_file = r'Z:\PG Automation.xlsx'  # Path to your Excel file
     ex = MigrationApp(excel_file)
     ex.show()
     sys.exit(app.exec_())
