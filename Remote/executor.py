@@ -4,16 +4,11 @@ import json
 import shutil
 import subprocess
 import psycopg2
-import requests
 import os
-import argparse
 import pandas as pd
 import logging
-
-log_file_path = r'C:\Users\sultan.m\Desktop\Remote\migration.log'
-#configure logging
-logging.basicConfig(filename=log_file_path,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
-
+import time
+import socket
 oracon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
 pgcon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\pgCon.txt'
 toolkit_path = r'C:\Program Files\edb\mtk\etc\toolkit.properties'
@@ -25,83 +20,12 @@ job_patch_path = r'C:\Program Files\edb\prodmig\PostMigPatches\patch_jobs.sql'
 migrationapp_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe'
 audittriggerapp_path = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe'
 comparetoolapp_path = r'C:\Program Files\edb\prodmig\Ora2PGCompToolKit\Debug\OraPostGreSqlComp.exe'
-version_path = r'C:\Users\sultan.m\Desktop\MigrationAutomation\version.txt'
-
-def get_latest_release_info(repo):
-    api_url = f"https://api.github.com/repos/{repo}/releases/latest"
-    headers = {
-        'Accept': 'application/vnd.github.v3+json'
-    }
-    response = requests.get(api_url, headers=headers)
-
-    if response.status_code == 200:
-        release_info = response.json()
-        return release_info
-    else:
-        print(f"Failed to fetch release information. Status code: {response.status_code}")
-        return None
-
-def checkForUpdates():
-    print('Checking for updates...')
-    try:
-        repo = "i-am-sultan/MigrationAutomation"
-        latest_release = get_latest_release_info(repo)
-
-        if latest_release:
-            latest_version = latest_release['tag_name']
-            assets = latest_release['assets']
-
-            if assets:
-                update_asset = assets[0]  # Assuming the first asset is the one you want to download
-                update_url = update_asset['browser_download_url']
-
-                global version_path
-
-                # Read the current version from a file (version.txt in the app directory)
-                with open(version_path, 'r') as f:
-                    current_version = f.read().strip()
-
-                print(f'Current version: {current_version}')
-                print(f'Latest version: {latest_version}')
-
-                # Compare versions
-                if latest_version != current_version:
-                    print('New version available. Downloading and applying update...')
-
-                    # Download the update
-                    response = requests.get(update_url)
-                    if response.status_code == 200:
-                        # update_filename = os.path.basename(update_url)
-                        update_filename = f"ginesys_main_{latest_version}.py"
-                        update_file_path = os.path.join(os.getcwd(), update_filename)
-
-                        with open(update_file_path, 'wb') as f:
-                            f.write(response.content)
-
-                        print('Update downloaded successfully.')
-
-                        # Update the current version
-                        with open(version_path, 'w') as f:
-                            f.write(latest_version)
-                        
-                        current_filename = os.path.join(os.getcwd(),os.path.basename(update_url))
-                        #Change the directory of the old file
-                        shutil.copy(current_filename, os.path.join(os.getcwd(),'PreviousVersions'))
-                        os.remove(current_filename)
-
-                        print('Update applied successfully.')
-                    else:
-                        print(f"Failed to download update. Status code: {response.status_code}")
-                else:
-                    print('You are already using the latest version.')
-            else:
-                print('No assets found in the latest release.')
-        else:
-            print('Failed to fetch latest release information.')
-
-    except Exception as e:
-        print(f'Error checking and applying updates: {e}')
-
+log_dir = r'C:\Users\ginesysdevops\Desktop\Remote'
+log_file_path = os.path.join(log_dir, f'migration_log_{socket.gethostname()}.log')
+with open(log_file_path,'w') as logfile:
+    logfile.write('\n')
+logging.basicConfig(filename=log_file_path,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
+            
 def updateOraCon(OraSchema, OraHost, oraPort, OraPass, OraService, filepath):
     content = (
             f"User Id={OraSchema};Password={OraPass};"
@@ -139,7 +63,6 @@ def updateToolkit(OraSchema, OraHost, OraPort, OraPass, OraService, pgHost, pgPo
     except Exception as e:
         logging.info(f'\nError: updating file toolkit.properties: {str(e)}')
     logging.info('toolkit.properties updated successfully...')
-    logging.info(f'Please check the credentials of toolkit.properties in below logwindow before proceed...\n{content}')
 
 def updateConnectionJson(OraSchema, OraHost, OraPort, OraPass, OraService, pgHost, pgPort, pgUser, pgPass, pgDbName, filepath):
     try:
@@ -305,8 +228,6 @@ def load_credentials_from_excel(excel_filepath,remotehost):
         if not row.empty:
             # Extract Oracle credentials
             credentials['oraSchema'] = row['OraSchema'].values[0]
-            print(credentials)
-
             credentials['oraHost'] = row['OraHost'].values[0]
             credentials['oraPort'] = row['OraPort'].values[0]
             credentials['oraPass'] = row['OraPass'].values[0]
@@ -318,7 +239,6 @@ def load_credentials_from_excel(excel_filepath,remotehost):
             credentials['pgPort'] = row['PgPort'].values[0]
             credentials['pgPass'] = row['PgPass'].values[0]
             credentials['pgUser'] = row['PgUser'].values[0]
-
             logging.info(f"Credentials successfully loaded from file {excel_filepath} \n{credentials}")
         else:
             logging.info(f"\nError: No entry found for the remote host {remotehost}")
@@ -363,63 +283,83 @@ def create_jobs(credentials):
     except Exception as e:
         print(f'Error creating jobs: {e}')
 
-def run_external_app(app_path):
+def run_external_app(app_path, inputs=None):
     try:
         if sys.platform.startswith('win'):
-            # To run the application on a dedicated terminal
-            # subprocess.Popen(f'start cmd /c "{app_path}"', shell=True)
-            # to run the application run on the same terminal
-            # process = subprocess.Popen([app_path], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            process = subprocess.Popen([app_path], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-            # Capture and log stdout and stderr
-            # stdout, stderr = process.communicate(input=b'input_data\n')  # Replace 'input_data' with your actual input
+            logging.info('Lucky you! You are using Windows!')
+            process = subprocess.Popen(
+                app_path,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                stdin=subprocess.PIPE,
+                text=True  # This will automatically handle the encoding/decoding
+            )
+
+            if inputs:
+                for input_data in inputs:
+                    time.sleep(input_data.get('delay', 0))  # Wait for a specific period before sending the input
+                    process.stdin.write(f"{input_data['value']}\n")
+                    process.stdin.flush()
+
             stdout, stderr = process.communicate()
+
             if stdout:
                 logging.info(f'Stdout from {app_path}:')
-                logging.info(stdout.decode('utf-8'))
+                logging.info(stdout)
             if stderr:
                 logging.error(f'Stderr from {app_path}:')
-                logging.error(stderr.decode('utf-8'))
+                logging.error(stderr)
             else:
                 logging.info(f'{app_path} executed successfully.')
+
+            return process.returncode
         else:
             logging.info('Unsupported OS.')
             return
     except Exception as e:
-        logging.info(f'Error running {app_path}: {e}')
+        logging.error(f'Error running {app_path}: {e}')
+        return -1
+
 
 
 # Entry point for the application
-import socket
 if __name__ == '__main__':
-    excel_filepath = r'C:\Users\sultan.m\Desktop\Remote\PG Automation.xlsx'
-    # hostname = socket.gethostname()
-    hostname_filepath = r'C:\Users\sultan.m\Desktop\Remote\current_host.txt'
+    excel_filepath = r'C:\Users\ginesysdevops\Desktop\Remote\PG Automation.xlsx'
+    hostname_filepath = r'C:\Users\ginesysdevops\Desktop\Remote\current_host.txt'
     with open(hostname_filepath,'r') as f1:
         current_hostname=f1.read()
     credentials = load_credentials_from_excel(excel_filepath,current_hostname)
-    logging.info(f'credentials: {credentials}')
     update_connections(credentials)
-    app_paths = [migrationapp_path,audittriggerapp_path]
-    for app in app_paths:
-        run_external_app(app)
-    print()
-    logging.info(f"credentials['pgDbName']: {credentials['pgDbName']}")
-    updatePatchDrill(credentials['pgDbName'],patch_drill_path)
-    updatePatchLive(credentials['pgDbName'],patch_live_path)
-    executePatch(
-        credentials['pgHost'],
-        credentials['pgPort'],
-        credentials['pgUser'],
-        credentials['pgPass'],
-        credentials['pgDbName'],
-        patch_drill_path)
+    oracle_schema_name = credentials['oraSchema']
+    app_paths = [
+        (migrationapp_path, [
+            {'value': '1', 'delay': 0},  # First input immediately
+            {'value': f'{oracle_schema_name}', 'delay': 20}  # Second input after 2 minutes
+        ]),
+        (audittriggerapp_path, None)  # No input needed for the second app
+    ]    
+    for app,inputs in app_paths:
+        return_code = run_external_app(app,inputs)
+        if return_code != 0:
+            logging.error(f'{app} exited with code {return_code}. Stopping execution.')
+            break
+    # if return_code != 0:
+        # updatePatchDrill(credentials['pgDbName'],patch_drill_path)
+        # # updatePatchLive(credentials['pgDbName'],patch_live_path)
+        # executePatch(
+        #     credentials['pgHost'],
+        #     credentials['pgPort'],
+        #     credentials['pgUser'],
+        #     credentials['pgPass'],
+        #     credentials['pgDbName'],
+        #     patch_drill_path)
 
-    createJobs(
-        credentials['oraSchema'],
-        credentials['pgHost'],
-        credentials['pgPort'],
-        credentials['pgUser'],
-        credentials['pgPass'],
-        credentials['pgDbName'],
-        patch_drill_path)
+        # createJobs(
+        #     credentials['oraSchema'],
+        #     credentials['pgHost'],
+        #     credentials['pgPort'],
+        #     credentials['pgUser'],
+        #     credentials['pgPass'],
+        #     credentials['pgDbName'],
+        #     patch_drill_path)

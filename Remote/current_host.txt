@@ -1,0 +1,1 @@
+vm-jumpbox-erp-prod-01.centralindia.cloudapp.azure.com

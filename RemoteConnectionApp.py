@@ -8,18 +8,13 @@ import socket
 class MigrationApp(QWidget):
     def __init__(self, excel_file):
         super().__init__()
-
         self.excel_file = excel_file
         self.initUI()
-
     def initUI(self):
         self.setWindowTitle('Automated Migration Application')
-
         # Set initial size of the window
         self.resize(900, 500)  # Width: 900 pixels, Height: 500 pixels
-
         layout = QVBoxLayout()
-
         # Load the Excel file
         try:
             self.df = pd.read_excel(self.excel_file)
@@ -63,7 +58,7 @@ class MigrationApp(QWidget):
         current_host_path = f"{shared_dir}current_host.txt"
         with open(current_host_path,'w') as file:
             file.write(hostname)
-        
+
         try:
             # Establish SSH connection
             ssh = paramiko.SSHClient()
@@ -88,11 +83,11 @@ class MigrationApp(QWidget):
                     remote_file_path = os.path.join(remote_dir, file_name)
                     sftp.put(local_file_path, remote_file_path)
                 sftp.close()
+
             except FileNotFoundError:
                 raise Exception(f'Local file not found in directory: {shared_dir}')
             except Exception as e:
                 raise Exception(f'Failed to transfer files to remote host: {str(e)}')
-            
             remote_python_script_path = f"{remote_dir}executor.py"
             # Execute the migration script
             exec_command = f'python {remote_python_script_path}'
@@ -100,7 +95,6 @@ class MigrationApp(QWidget):
             output = stdout.read().decode()
             error = stderr.read().decode()
             if error:
-
                 raise Exception(error)
             
             ssh.close()
