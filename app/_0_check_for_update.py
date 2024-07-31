@@ -11,9 +11,7 @@ logging.basicConfig(filename=log_file_path,filemode='a',format='%(asctime)s - %(
 
 def get_latest_release_info(repo):
     api_url = f"https://api.github.com/repos/{repo}/releases/latest"
-    headers = {
-        'Accept': 'application/vnd.github.v3+json'
-    }
+    headers = {'Accept': 'application/vnd.github.v3+json'}
     response = requests.get(api_url, headers=headers)
 
     if response.status_code == 200:

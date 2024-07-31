@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "project-remote-migration-app",
+  "private_key_id": "74f9c6a9bd4175c82559fd690414ff20ce899266",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCkz1BjaOnb/r34\nc08SWanmtJc6dDoqjyabkVH3InnwxPraGm+TMm6uvSgox3QkBwYk2uIm7nHmEy8o\nhZt2xPE8Zhd33MSuBEOIN33NoX3DvMkNLb6aAurDc63qR438mNh7HTxyuXKZ19O5\nOVqYqOOT85GbOv7AAcv5+wAhAvYo4/eiu8yOLFr1TMEPLil1awtLYt+vxeY4qqO/\n3SGLCEAdwpbTWCVwdHrbFRvELrILKMT/u+6HAHjjqeOnqIXYgsGxS+EUb7IRAEvd\n3hArfKWKzXGvOuDHFKyjtLWZG+ARkhR0HIwpGkrrF+JO3LOHG2FNG4vi4g59R+G1\nuyqF4/MFAgMBAAECggEAD2GCrthgdOXUDF8UitGf49ZIQ84LjKPB9mRMSjxnNXNo\nttifP5VGE5w3JoEgw2j9Z4ye7QO1UQPK06UOcnnkSp77gzXxDA19UPXe0YVIA6+3\ncrmpb12k07tUyIfHhkKsd2bt2IYaniVwjrl9zT/7xzfEx8AsfLZeNzT32NzaJMwl\nI90jV8TontMz7K711+rEMPqGUx7SLnKUKITyveSYwrnNP0ozoBZbH9NSYtXFET4V\nbFgaGLWgPxWiqSA3qSk9ZZhmWxo+rxnZpiEzYl00Xf7/iWAzxnblFu6IzoDgP8mQ\nvqhIOFwYdFlqYjBA/ZflskqHF6ixe5gAYFhIj6pxuQKBgQDlCE+lC7XJzm4T11nZ\nom3v617PA4rDuPx8Du6WT0cj56+cgQQe5r3rxd8IxxYkLgETtxex0RaZjKbqr8pB\nK9oHyQRZRbvo7FAPr/mOkQ0+UYbdK3F1EwcFN6bv22FKCpGiUmsuHSig6yY0H7MC\nt2Q4sLCYvZmjzWgnaEIKkSFsHQKBgQC4NyZnUpHXMrOTYyz+Extn6z1nvK9FkAZH\nHuSM5LOC2U8NZ2pJLlp0/8iKFSACMNwy5Jr39cP+rlaJpFxYunnC/Ike1U0B6qTB\nkwMHacuMomQ5G3DjumMptziyKVppdxFVUKoO5ut81vu0oCri81GFVZ6y46l+wVlv\nWHFwEe7eCQKBgQCWTN33cbfat52FZ82PBQkgaVXOhISL7NnEkAgCnAQTi/eyvPf3\nT3VTRIcZO41MMOSEC6OBDbXHDoZ7fOE944kxkrlH3Ht0X6Aqq1EaPhZyzw2yFtBe\nBB6XTe4/ebhe3pCz9WJg4MHI2Ig5rJPNNIyQp2M82S/6TtILCmBMjvFgAQKBgBoy\nfZuj+mmIJFGJgRSA0xzsL0dZZfOWj839brM6suygysU1N8BAf0y0M2ivqGWnXSk/\nqWop4T2OvW/Fl/xmSHqaP0XLP7BOFjARIBUlznSpg2c7p8o67283RzDPALSO4kAn\nwIdt/385c4I0ZOTxhV5Y1sDJ74i/JmDXSwqNAlNBAoGBAJTfyZTQrZfmiiBnOAVx\nnX6fy2MbV2eQlVpB0dwa3XLWqMmyu5KCP9a7+vOyJE8SI8i4RnLoPE1qvulzpTku\nAEeMqYPcbKpWw9DCisQpr240pVvP2EBqySRURp+hWQE2aYVbvJzxwvrrqF4NC1Pt\nifkBYXJO+YgCBC/MJkeAG01x\n-----END PRIVATE KEY-----\n",
+  "client_email": "ginesys-remote-migration@project-remote-migration-app.iam.gserviceaccount.com",
+  "client_id": "114633336195011940981",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ginesys-remote-migration%40project-remote-migration-app.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -1,3 +1,1 @@
-2024-07-30 18:01:38,892 - INFO - Checking for updates...
-2024-07-30 18:01:39,259 - INFO - Failed to fetch release information. Status code: 404
-2024-07-30 18:01:39,260 - INFO - Failed to fetch latest release information.
+2024-07-31 18:35:14,385 - ERROR - Error running C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe: expected str, bytes or os.PathLike object, not int
