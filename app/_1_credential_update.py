@@ -8,58 +8,73 @@ import json
 import shutil
 from sheet import *
 
-oracon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
-pgcon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\pgCon.txt'
-toolkit_path = r'C:\Program Files\edb\mtk\etc\toolkit.properties'
-connection_json_path = r'C:\Program Files\edb\prodmig\Ora2PGCompToolKit\Debug\Connection.json'
-audit_path = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1'
+# File Paths
+ORACON_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
+PGCON_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\pgCon.txt'
+TOOLKIT_PATH = r'C:\Program Files\edb\mtk\etc\toolkit.properties'
+CONNECTION_JSON_PATH = r'C:\Program Files\edb\prodmig\Ora2PGCompToolKit\Debug\Connection.json'
+AUDIT_PATH = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1'
 
+# Logging Configuration
+LOG_DIR = os.path.join(os.getcwd(), 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE_PATH = os.path.join(LOG_DIR, f'migration_log_{socket.gethostname()}.log')
 
-log_dir = os.getcwd()
-log_file_path = os.path.join(log_dir,'logs',f'migration_log_{socket.gethostname()}.log')
-logging.basicConfig(filename=log_file_path,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
-
+logging.basicConfig(
+    filename=LOG_FILE_PATH,
+    filemode='a',
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.INFO
+)
 
 def update_connections(credentials):
     try:
-        # Pre-specified file paths
-        updateOraCon(credentials['oraSchema'], credentials['oraHost'], credentials['oraPort'], credentials['oraPass'], credentials['oraService'], oracon_path)
-        updatepgCon(credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], pgcon_path)
+        # Update configuration files
+        result = updateOraCon(credentials['oraSchema'], credentials['oraHost'], credentials['oraPort'], credentials['oraPass'], credentials['oraService'], ORACON_PATH)
+        if result:
+            return result
+        updatepgCon(credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], PGCON_PATH)
         updateToolkit(credentials['oraSchema'], credentials['oraHost'], credentials['oraPort'], credentials['oraPass'], credentials['oraService'],
-                      credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], toolkit_path)
+                      credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], TOOLKIT_PATH)
         updateConnectionJson(credentials['oraSchema'], credentials['oraHost'], credentials['oraPort'], credentials['oraPass'], credentials['oraService'],
-                             credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], connection_json_path)
+                             credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], CONNECTION_JSON_PATH)
 
         # Copy the files to the destination directory
-        success = copyFiles(audit_path)
-        if success:
+        if copyFiles(AUDIT_PATH):
             logging.info('Connections updated and files copied successfully.')
-            return 1
+            return 'Connections updated and files copied successfully.'
         else:
-            logging.info('An error occurred while copying files.')
-            return 0
+            logging.error('An error occurred while copying files.')
+            return 'An error occurred while copying files.'
     except Exception as e:
-        logging.info(f'An error occurred: {e}')
-        return f'{e}'
+        logging.error(f'An error occurred: {e}', exc_info=True)
+        return str(e)
 
-def updateOraCon(OraSchema, OraHost, oraPort, OraPass, OraService, filepath):
+def updateOraCon(OraSchema, OraHost, OraPort, OraPass, OraService, filepath):
     content = (
-            f"User Id={OraSchema};Password={OraPass};"
-            f"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={OraHost})(PORT={oraPort}))"
-            f"(CONNECT_DATA=(SERVICE_NAME={OraService})))"
-        )
-    with open(filepath, 'w') as f1:
-        f1.write(content)
-    logging.info('OraCon updated successfully...')
+        f"User Id={OraSchema};Password={OraPass};"
+        f"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={OraHost})(PORT={OraPort}))"
+        f"(CONNECT_DATA=(SERVICE_NAME={OraService})))"
+    )
+    try:
+        with open(filepath, 'w') as f1:
+            f1.write(content)
+        logging.info('OraCon updated successfully.')
+        return 0
+    except Exception as e:
+        logging.error(f'Error updating OraCon.txt: {e}', exc_info=True)
+        return f'{e}'
 
 def updatepgCon(pgHost, pgPort, pgUser, pgPass, pgDbName, filepath):
     content = (f"Server={pgHost};Port={pgPort};Database={pgDbName};User Id={pgUser};Password={pgPass};ApplicationName=w3wp.exe;Ssl Mode=Require;")
-    with open(filepath, 'w') as f1:
-        f1.write(content)
-    logging.info('pgCon updated successfully... ')
+    try:
+        with open(filepath, 'w') as f1:
+            f1.write(content)
+        logging.info('pgCon updated successfully.')
+    except Exception as e:
+        logging.error(f'Error updating pgCon.txt: {e}', exc_info=True)
 
 def updateToolkit(OraSchema, OraHost, OraPort, OraPass, OraService, pgHost, pgPort, pgUser, pgPass, pgDbName, filepath):
-    # Prepare the new properties
     oracle_url = f"jdbc:oracle:thin:@{OraHost}:{OraPort}:{OraService}"
     postgres_url = f"jdbc:postgresql://{pgHost}:{pgPort}/{pgDbName}"
     
@@ -70,52 +85,52 @@ def updateToolkit(OraSchema, OraHost, OraPort, OraPass, OraService, pgHost, pgPo
         f"TARGET_DB_URL={postgres_url}\n"
         f"TARGET_DB_USER={pgUser}\n"
         f"TARGET_DB_PASSWORD={pgPass}\n"
-    )   
-    try: 
+    )
+    try:
         with open(filepath, 'w') as f1:
             f1.write(content)
+        logging.info('toolkit.properties updated successfully.')
     except FileNotFoundError:
-        logging.info(f'\nError: file {filepath} not found.')
+        logging.error(f'Error: file {filepath} not found.')
     except Exception as e:
-        logging.info(f'\nError: updating file toolkit.properties: {str(e)}')
-    logging.info('toolkit.properties updated successfully...')
+        logging.error(f'Error updating toolkit.properties: {e}', exc_info=True)
 
 def updateConnectionJson(OraSchema, OraHost, OraPort, OraPass, OraService, pgHost, pgPort, pgUser, pgPass, pgDbName, filepath):
     try:
         with open(filepath, 'r') as f:
             connections = json.load(f)
-        # Update the Oracle connection string
         connections["Connection_1"] = f"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={OraHost})(PORT={OraPort}))(CONNECT_DATA=(SERVICE_NAME={OraService})));User Id={OraSchema};Password={OraPass};DatabaseType=ORACLE"
-        # Update the PostgreSQL connection string
         connections["Connection_2"] = f"Server={pgHost};Port={pgPort};Database={pgDbName};User Id={pgUser};Password={pgPass};ApplicationName=w3wp.exe;Ssl Mode=Require;DatabaseType=POSTGRES"
         with open(filepath, 'w') as f:
             json.dump(connections, f, indent=4)
-        logging.info('connection.json updated successfully...')
+        logging.info('connection.json updated successfully.')
     except FileNotFoundError:
-        logging.info(f'\nError: File {filepath} not found.')
+        logging.error(f'Error: File {filepath} not found.')
     except json.JSONDecodeError as e:
-        logging.info(f'\nError: Failed to decode JSON from {filepath}. Details: {str(e)}')
+        logging.error(f'Error decoding JSON from {filepath}: {e}', exc_info=True)
     except Exception as e:
-        logging.info(f'\nError updating connection.json: {str(e)}')
+        logging.error(f'Error updating connection.json: {e}', exc_info=True)
+
 def copyFiles(destination_dir):
     try:
-        shutil.copy(oracon_path, destination_dir)
-        shutil.copy(pgcon_path, destination_dir)
-        
-        logging.info(f'OraCon.txt and pgCon.txt copied and pasted successfully...')
+        shutil.copy(ORACON_PATH, destination_dir)
+        shutil.copy(PGCON_PATH, destination_dir)
+        logging.info('OraCon.txt and pgCon.txt copied successfully.')
         return True
     except Exception as e:
-        logging.info(f'\nError copying files: {e}')
+        logging.error(f'Error copying files: {e}', exc_info=True)
         return False
 
 if __name__ == "__main__":
-    private_ip = get_private_ip()
-    excel_df = access_sheet()
-    # print(socket.gethostname())
-    credentials = load_credentials_from_excel(excel_df,private_ip)
-    result = update_connections(credentials)
-    if result:
-        update_sheet(private_ip)
-        logging.info('Status updated in google sheet.')
-    else:
-        logging.info('Credentials not updated, check error log.')
+    try:
+        private_ip = get_private_ip()
+        excel_df = access_sheet()
+        credentials = load_credentials_from_excel(excel_df, private_ip)
+        result = update_connections(credentials)
+        if result:
+            update_sheet(private_ip)
+            logging.info('Status updated in Google Sheet.')
+        else:
+            logging.error('Credentials not updated. Check error log.')
+    except Exception as e:
+        logging.error(f'An unexpected error occurred: {e}', exc_info=True)

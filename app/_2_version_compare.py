@@ -37,7 +37,7 @@ def compare_versions(credentials):
     if ora_version == pg_version:
         msg = f'Success: Great, Version Matched!\nOracle({ora_version}) and Postgres({pg_version}) Version are the same,now you can proceed with migration!'
         logging.info(msg)
-        return 'Version Matched'
+        return msg
     else:
         msg = f'Error: Version Mismatch!\nOracle Version : {ora_version} and PostgreSQL Version: {pg_version}'
         logging.info(msg)

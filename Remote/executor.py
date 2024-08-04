@@ -9,6 +9,7 @@ import pandas as pd
 import logging
 import time
 import socket
+
 oracon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
 pgcon_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\pgCon.txt'
 toolkit_path = r'C:\Program Files\edb\mtk\etc\toolkit.properties'
@@ -20,6 +21,7 @@ job_patch_path = r'C:\Program Files\edb\prodmig\PostMigPatches\patch_jobs.sql'
 migrationapp_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe'
 audittriggerapp_path = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe'
 comparetoolapp_path = r'C:\Program Files\edb\prodmig\Ora2PGCompToolKit\Debug\OraPostGreSqlComp.exe'
+
 log_dir = r'C:\Users\ginesysdevops\Desktop\Remote'
 log_file_path = os.path.join(log_dir, f'migration_log_{socket.gethostname()}.log')
 with open(log_file_path,'w') as logfile:
@@ -344,7 +346,7 @@ if __name__ == '__main__':
         if return_code != 0:
             logging.error(f'{app} exited with code {return_code}. Stopping execution.')
             break
-    # if return_code != 0:
+    # if return_code = 0:
         # updatePatchDrill(credentials['pgDbName'],patch_drill_path)
         # # updatePatchLive(credentials['pgDbName'],patch_live_path)
         # executePatch(
