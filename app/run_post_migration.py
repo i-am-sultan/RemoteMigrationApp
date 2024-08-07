@@ -1,20 +1,19 @@
-import sheet
-import sys
 import psycopg2
-import re
 import logging 
 import os
 import socket
+from google_sheet import *
+from log_sheet import *
 
 common_postmig_patch = r'C:\Program Files\edb\prodmig\PostMigPatches\postmigration.sql'
 
-log_dir = os.getcwd()
-log_file_path = os.path.join(log_dir,'logs',f'migration_log_{socket.gethostname()}.log')
-logging.basicConfig(filename=log_file_path,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
-
+# Logging Configuration
+LOG_DIR = os.path.join(os.getcwd(), 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE_PATH = os.path.join(LOG_DIR, f'migration_log_{socket.gethostname()}.log')
+logging.basicConfig(filename=LOG_FILE_PATH,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 
 def execute_postmigration_script(credentials,patch_path):
-
     pgHost = credentials['pgHost']
     pgPort = credentials['pgPort']
     pgUserName = credentials['pgUser']
@@ -37,14 +36,17 @@ def execute_postmigration_script(credentials,patch_path):
     
         logging.info(f'Success: Postmigration {patch_path} executed on database {pgDbname}.')
         return f'Success: Postmigration {patch_path} executed on database {pgDbname}.'
+
     except psycopg2.Error as e:
         # Log any psycopg2 database errors
         logging.info(f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Error: {e}')
         return f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Error: {e}'
+
     except Exception as e:
         # Log any other unexpected errors
         logging.info(f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Unexpected error: {e}')
         return f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Unexpected error: {e}'
+        
     finally:
         if cursor:
             cursor.close()
@@ -52,9 +54,8 @@ def execute_postmigration_script(credentials,patch_path):
             connection.close()
 
 if __name__ == "__main__":
-    private_ip = sheet.get_private_ip()
-    excel_df = sheet.access_sheet()
-    credentials = sheet.load_credentials_from_excel(excel_df,private_ip)
+    private_ip = get_private_ip()
+    excel_df = access_sheet()
+    credentials = load_credentials_from_excel(excel_df,private_ip)
     result = execute_postmigration_script(credentials,common_postmig_patch)
-    sheet.update_sheet(private_ip,'Status',result)
-    
+    update_sheet(private_ip,'Status',result)

@@ -1,0 +1,8 @@
+2024-08-07 11:22:36,582 - INFO - Credentials successfully loaded from file Google Sheet 
+{'oraSchema': 'MAIN', 'oraHost': 'gsl-kol-sr-03', 'oraPort': 1521, 'oraPass': 'gmpl', 'oraService': 'MAIN', 'pgDbName': 'pgdev', 'pgHost': 'gsl-kol-sr-05', 'pgPort': 5432, 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-07 11:22:36,973 - INFO - 
+Error creating jobs for the database pgdev: procedure schedule_jobs_in_postgres() does not exist
+LINE 1: call schedule_jobs_in_postgres()
+             ^
+HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+
