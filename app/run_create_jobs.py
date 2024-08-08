@@ -11,7 +11,7 @@ os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE_PATH = os.path.join(LOG_DIR, f'migration_log_{socket.gethostname()}.log')
 logging.basicConfig(filename=LOG_FILE_PATH, filemode='a', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-def createJobs(credentials):
+def create_database_jobs(credentials):
     pgHost = credentials['pgHost']
     pgPort = credentials['pgPort']
     pgUserName = credentials['pgUser']
@@ -44,5 +44,5 @@ if __name__ == "__main__":
     private_ip = get_private_ip()
     excel_df = access_sheet()
     credentials = load_credentials_from_excel(excel_df,private_ip)
-    result = createJobs(credentials)
+    result = create_database_jobs(credentials)
     update_sheet(private_ip,'Status',result)

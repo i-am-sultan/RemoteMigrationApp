@@ -73,7 +73,7 @@ def executePatch(pgHost,pgPort,pgUserName,pgPass,pgDbname, patch_path):
 
         # Log successful execution
         logging.info(f'Success: Executed patch {patch_path} on database {pgDbname}.')
-        return f'Success: Executed patch {patch_path} on database {pgDbname}.'
+        return 0
         
     except psycopg2.Error as e:
         # Log any psycopg2 database errors

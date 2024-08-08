@@ -22,7 +22,7 @@ def run_audit_app(app_path):
 
         if process.returncode == 0:
             logging.info(f'{app_path} executed successfully.')
-            return f'{app_path} executed successfully.'
+            return 0
         else:
             logging.error(f'{app_path} failed with return code {process.returncode}.')
             return f'{app_path} failed with return code {process.returncode}.'

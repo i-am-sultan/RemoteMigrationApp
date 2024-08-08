@@ -44,7 +44,7 @@ def update_connections(credentials):
         # Copy the files to the destination directory
         if copyFiles(AUDIT_PATH):
             logging.info('Connections updated and files copied successfully.')
-            return 'Connections updated and files copied successfully.'
+            return 0
         else:
             logging.error('An error occurred while copying files.')
             return 'An error occurred while copying files.'

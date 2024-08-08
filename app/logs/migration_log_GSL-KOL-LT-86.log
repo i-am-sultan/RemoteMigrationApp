@@ -1,8 +1,20 @@
-2024-08-07 11:22:36,582 - INFO - Credentials successfully loaded from file Google Sheet 
+2024-08-08 12:08:00,729 - INFO - Credentials successfully loaded from file Google Sheet 
 {'oraSchema': 'MAIN', 'oraHost': 'gsl-kol-sr-03', 'oraPort': 1521, 'oraPass': 'gmpl', 'oraService': 'MAIN', 'pgDbName': 'pgdev', 'pgHost': 'gsl-kol-sr-05', 'pgPort': 5432, 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
-2024-08-07 11:22:36,973 - INFO - 
-Error creating jobs for the database pgdev: procedure schedule_jobs_in_postgres() does not exist
-LINE 1: call schedule_jobs_in_postgres()
-             ^
-HINT:  No procedure matches the given name and argument types. You might need to add explicit type casts.
+2024-08-08 12:08:01,796 - INFO - Success: Great, Version Matched!
+Oracle(12.22.0) and Postgres(12.22.0) Version are the same,now you can proceed with migration!
+2024-08-08 12:08:02,088 - INFO - DBVersion Matched
+2024-08-08 12:08:02,088 - INFO - OraCon updated successfully.
+2024-08-08 12:08:02,088 - INFO - pgCon updated successfully.
+2024-08-08 12:08:02,088 - INFO - config.json successfully updated.
+2024-08-08 12:08:02,088 - INFO - toolkit.properties updated successfully.
+2024-08-08 12:08:02,088 - INFO - connection.json updated successfully.
+2024-08-08 12:08:02,109 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-08 12:08:02,109 - INFO - Connections updated and files copied successfully.
+2024-08-08 12:08:02,142 - INFO - Credentials updated successfully.
+2024-08-08 12:08:25,165 - INFO - C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe executed successfully.
+2024-08-08 12:08:25,183 - INFO - Migration app started successfully
+2024-08-08 12:08:25,995 - WARNING - Row count mismatch for the table 
+admattached_files: Oracle: 0, Postgres: 40
 
+2024-08-08 12:08:26,048 - INFO - Migration failed! 1
+2024-08-08 12:16:26,141 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'MAIN', 'oraHost': 'gsl-kol-sr-03', 'oraPort': 1521, 'oraPass': 'gmpl', 'oraService': 'MAIN', 'pgDbName': 'pgdev', 'pgHost': 'gsl-kol-sr-05', 'pgPort': 5432, 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}

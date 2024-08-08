@@ -21,10 +21,9 @@ def run_mig_app(app_path):
             text=True, #When set to True, will return the stdout and stderr as string, otherwise as bytes.
             check = True #a boolean value that indicates whether to check the return code of the subprocess, if check is true and the return code is non-zero, then subprocess `CalledProcessError` is raised.
         )
-
         if process.returncode == 0:
             logging.info(f'{app_path} executed successfully.')
-            return f'{app_path} executed successfully.'
+            return 0
         else:
             logging.error(f'{app_path} failed with return code {process.returncode}.')
             return f'{app_path} failed with return code {process.returncode}.'
@@ -49,9 +48,9 @@ def check_run_mig_status(credentials):
             print(f'oracle: {oracle_data_count},postgres: {postgres_data_count}')
             if postgres_data_count != oracle_data_count:
                 logging.warning(f'Row count mismatch for the table \n{table_name}: Oracle: {oracle_data_count}, Postgres: {postgres_data_count}\n')
-                return 0
-            else:
                 return 1
+            else:
+                return 0
         cur.close()
         pgcon.close()
     except psycopg2.DatabaseError as e:

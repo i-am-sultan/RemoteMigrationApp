@@ -35,7 +35,7 @@ def execute_postmigration_script(credentials,patch_path):
         connection.commit()
     
         logging.info(f'Success: Postmigration {patch_path} executed on database {pgDbname}.')
-        return f'Success: Postmigration {patch_path} executed on database {pgDbname}.'
+        return 0
 
     except psycopg2.Error as e:
         # Log any psycopg2 database errors
@@ -45,7 +45,7 @@ def execute_postmigration_script(credentials,patch_path):
     except Exception as e:
         # Log any other unexpected errors
         logging.info(f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Unexpected error: {e}')
-        return f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Unexpected error: {e}'
+        return f'\nError: Failed to execute postmigratoin {patch_path} on database {pgDbname}. Error: {e}'
         
     finally:
         if cursor:

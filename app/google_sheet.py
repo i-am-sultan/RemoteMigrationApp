@@ -47,7 +47,7 @@ def load_credentials_from_excel(excel_df,remoteip):
             credentials['pgPort'] = row['PgPort'].values[0]
             credentials['pgPass'] = row['PgPass'].values[0]
             credentials['pgUser'] = row['PgUser'].values[0]
-            logging.info(f"Credentials successfully loaded from file Google Sheet \n{credentials}")
+            logging.info(f"Credentials successfully loaded from file Google Sheet {credentials}")
         else:
             logging.info(f"\nError: No entry found for the remote host {remoteip}")
     except Exception as e:
