@@ -1,0 +1,79 @@
+2024-08-12 04:33:21,394 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'VEHO', 'oraHost': '172.16.4.5', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'PG-MIG-TEST', 'pgHost': 'psql-erp-prod-01.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'qs$3?j@*>CA6!#Dy', 'pgUser': 'gslpgadmin'}
+2024-08-12 04:33:21,411 - INFO - Database "PG-MIG-TEST" does not exist.
+2024-08-12 04:33:21,424 - INFO - All connections to database "templatedb" have been terminated.
+2024-08-12 04:33:23,037 - INFO - Database "PG-MIG-TEST" created successfully.
+2024-08-12 04:33:23,044 - INFO - Status updated in status.json
+2024-08-12 04:33:23,475 - INFO - Database setup done
+2024-08-12 04:33:23,571 - INFO - Success: Great, Version Matched!
+Oracle(12.22.4) and Postgres(12.22.4) Version are the same,now you can proceed with migration!
+2024-08-12 04:33:23,577 - INFO - Status updated in status.json
+2024-08-12 04:33:23,747 - INFO - DBVersion Matched
+2024-08-12 04:33:23,747 - INFO - OraCon updated successfully.
+2024-08-12 04:33:23,748 - INFO - pgCon updated successfully.
+2024-08-12 04:33:23,754 - INFO - config.json successfully updated.
+2024-08-12 04:33:23,754 - INFO - toolkit.properties updated successfully.
+2024-08-12 04:33:23,759 - INFO - connection.json updated successfully.
+2024-08-12 04:33:23,768 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-12 04:33:23,769 - INFO - Connections updated and files copied successfully.
+2024-08-12 04:33:23,773 - INFO - Status updated in status.json
+2024-08-12 04:33:23,916 - INFO - Credentials updated successfully.
+2024-08-12 05:22:57,582 - INFO - C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe executed successfully.
+2024-08-12 05:22:57,583 - INFO - Status updated in status.json
+2024-08-12 05:22:57,737 - INFO - Migration app started successfully
+2024-08-12 05:22:57,757 - INFO - Status updated in status.json
+2024-08-12 05:22:57,910 - INFO - Migration succeeded! (with no row count mismatch).
+2024-08-12 05:36:10,244 - INFO - Success: Postmigration C:\Program Files\edb\prodmig\PostMigPatches\postmigration.sql executed on database PG-MIG-TEST.
+2024-08-12 05:36:10,245 - INFO - Status updated in status.json
+2024-08-12 05:36:10,399 - INFO - Postmigration Executed Successfully
+2024-08-12 05:37:10,363 - INFO - C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe executed successfully.
+2024-08-12 05:37:10,371 - INFO - Status updated in status.json
+2024-08-12 05:37:10,519 - INFO - Audit trigger app executed successfully.
+2024-08-12 05:37:10,520 - INFO - Successfully updated patch_drill.sql for database PG-MIG-TEST.
+2024-08-12 05:37:10,761 - INFO - Success: Executed patch C:\Program Files\edb\prodmig\PostMigPatches\patch_drill.sql on database PG-MIG-TEST.
+2024-08-12 05:37:10,769 - INFO - Status updated in status.json
+2024-08-12 05:37:10,920 - INFO - Postmigration patch 2(dblink, usermanagement) executed successfully
+2024-08-12 05:37:11,028 - INFO - Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_inward('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-12 05:37:11,073 - INFO - Procedure call "call main.db_pro_stk_bk_costadj_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-12 05:37:11,099 - INFO - Procedure call "call main.db_pro_sitetositemovement_not_in_outward();" executed successfully.
+2024-08-12 05:37:11,131 - INFO - Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_outward('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-12 05:37:11,139 - INFO - Procedure call "call main.db_proc_sitetosite_intransum('2023-04-01');" executed successfully.
+2024-08-12 05:37:12,730 - INFO - Procedure call "call main.db_pro_stk_bk_costadj_master_build('2023-04-01');" executed successfully.
+2024-08-12 05:37:47,449 - INFO - Procedure call "call main.db_pro_stk_bk_stockpointwise_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-12 05:37:49,663 - INFO - Procedure call "call main.db_pro_stk_bk_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-12 05:38:27,276 - INFO - Procedure call "call main.db_pro_stk_ageing_firsttime();" executed successfully.
+2024-08-12 05:38:28,753 - INFO - Procedure call "call main.db_pro_compositegst_firsttimepopulation('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-12 05:38:41,551 - INFO - Procedure call "call main.db_pro_stk_ageing_stockpointwise_firsttime();" executed successfully.
+2024-08-12 05:38:46,672 - ERROR - Error while executing procedure: connection already closed
+2024-08-12 05:38:47,816 - INFO - Procedure call "call main.db_pro_stk_bk_summary_stockpointwise_master_build('2023-04-01');" executed successfully.
+2024-08-12 05:38:47,824 - INFO - Status updated in status.json
+2024-08-12 05:38:47,993 - INFO - Population of initial cube data failed. Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_inward('2023-04-01', CURRENT_DATE);" executed successfully.
+Procedure call "call main.db_pro_stk_bk_costadj_batchwise_master_build('2023-04-01');" executed successfully.
+Procedure call "call main.db_pro_sitetositemovement_not_in_outward();" executed successfully.
+Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_outward('2023-04-01', CURRENT_DATE);" executed successfully.
+Procedure call "call main.db_proc_sitetosite_intransum('2023-04-01');" executed successfully.
+Procedure call "call main.db_pro_stk_bk_costadj_master_build('2023-04-01');" executed successfully.
+Procedure call "call main.db_pro_stk_bk_stockpointwise_batchwise_master_build('2023-04-01');" executed successfully.
+Procedure call "call main.db_pro_stk_bk_batchwise_master_build('2023-04-01');" executed successfully.
+Procedure call "call main.db_pro_stk_ageing_firsttime();" executed successfully.
+Procedure call "call main.db_pro_compositegst_firsttimepopulation('2023-04-01', CURRENT_DATE);" executed successfully.
+Procedure call "call main.db_pro_stk_ageing_stockpointwise_firsttime();" executed successfully.
+Error while executing procedure: connection already closed
+Procedure call "call main.db_pro_stk_bk_summary_stockpointwise_master_build('2023-04-01');" executed successfully.
+2024-08-12 05:46:19,156 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'VEHO', 'oraHost': '172.16.4.5', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'PG-MIG-TEST', 'pgHost': 'psql-erp-prod-01.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'qs$3?j@*>CA6!#Dy', 'pgUser': 'gslpgadmin'}
+2024-08-12 05:46:19,173 - INFO - Database "PG-MIG-TEST" already exists.
+2024-08-12 05:46:19,173 - INFO - Database creation skipped because the database already exists.
+2024-08-12 05:46:19,174 - INFO - Status updated in status.json
+2024-08-12 05:46:19,174 - INFO - Database setup done
+2024-08-12 05:46:19,269 - INFO - Success: Great, Version Matched!
+Oracle(12.22.4) and Postgres(12.22.4) Version are the same,now you can proceed with migration!
+2024-08-12 05:46:19,271 - INFO - Status updated in status.json
+2024-08-12 05:46:19,271 - INFO - DBVersion Matched
+2024-08-12 05:46:19,272 - INFO - OraCon updated successfully.
+2024-08-12 05:46:19,272 - INFO - pgCon updated successfully.
+2024-08-12 05:46:19,273 - INFO - config.json successfully updated.
+2024-08-12 05:46:19,273 - INFO - toolkit.properties updated successfully.
+2024-08-12 05:46:19,282 - INFO - connection.json updated successfully.
+2024-08-12 05:46:19,285 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-12 05:46:19,285 - INFO - Connections updated and files copied successfully.
+2024-08-12 05:46:19,287 - INFO - Status updated in status.json
+2024-08-12 05:46:19,287 - INFO - Credentials updated successfully.

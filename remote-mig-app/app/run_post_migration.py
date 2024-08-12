@@ -5,7 +5,7 @@ import socket
 from google_sheet import *
 from log_sheet import *
 
-common_postmig_patch = r'C:\Program Files\edb\prodmig\PostMigPatches\postmigration.sql'
+common_postmig_patch = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\postmigration.sql'
 
 # Logging Configuration
 LOG_DIR = os.path.join(os.getcwd(), 'logs')

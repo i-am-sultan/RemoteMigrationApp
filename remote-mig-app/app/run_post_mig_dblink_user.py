@@ -7,8 +7,8 @@ import logging
 import re
 import psycopg2
 
-patch_drill_path = r'C:\Program Files\edb\prodmig\PostMigPatches\patch_drill.sql'
-patch_live_path = r'C:\Program Files\edb\prodmig\PostMigPatches\patch_live.sql'
+patch_drill_path = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\patch_drill.sql'
+patch_live_path = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\patch_live.sql'
 
 # Logging Configuration
 LOG_DIR = os.path.join(os.getcwd(), 'logs')

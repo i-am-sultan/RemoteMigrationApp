@@ -18,7 +18,7 @@ import run_create_jobs as jobs
 
 # Configuration
 MIGRATION_APP_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe'
-COMMON_POSTMIG_PATCH = r'C:\Program Files\edb\prodmig\PostMigPatches\postmigration.sql'
+COMMON_POSTMIG_PATCH = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\postmigration.sql'
 AUDIT_TRIGGER_APP_PATH = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe'
 
 # Logging Configuration
@@ -98,8 +98,8 @@ def run_all_processes(credentials, private_ip, mode):
             update_status(private_ip, f'Migration failed! {migapp_status}')
             return
         
-        update_status_in_file('P1','S','Migration succeeded! (with no row count mismatch).')        
-        update_status(private_ip, 'Migration succeeded! (with no row count mismatch).')
+        update_status_in_file('P2','O','Data migration succeeded! (with no row count mismatch).')        
+        update_status(private_ip, 'Data migration succeeded! (with no row count mismatch).')
 
         # Process 4: Postmigration Script
         postmig_result = postmig.execute_postmigration_script(credentials, COMMON_POSTMIG_PATCH)
@@ -118,7 +118,7 @@ def run_all_processes(credentials, private_ip, mode):
             update_status(private_ip, f'Execution of audittrigger app failed. {runaudit_result}')
             return
         
-        update_status_in_file('P2','S','Audit trigger app executed successfully.')        
+        update_status_in_file('P3','O','Audit trigger app executed successfully.')        
         update_status(private_ip, 'Audit trigger app executed successfully.')
 
         # Process 6: Postmigration Patch 2
@@ -137,8 +137,8 @@ def run_all_processes(credentials, private_ip, mode):
             update_status_in_file('P3','F',f'Population of initial cube data failed. {cube_result}')
             update_status(private_ip, f'Population of initial cube data failed. {cube_result}')
             return
-        update_status_in_file('P3','O','Initial cube data populated successfully')       
-        update_status(private_ip, 'Initial cube data populated successfully')
+        update_status_in_file('P3','O','Initial cube data population started successfully.')       
+        update_status(private_ip, 'Initial cube data population started successfully.')
 
         # Process 8: Create Jobs (if drill mode)
         if mode == 'drill':
@@ -147,10 +147,10 @@ def run_all_processes(credentials, private_ip, mode):
                 update_status_in_file('P3','F',f'Error while creating jobs {jobs_result}')
                 update_status(private_ip, f'Error while creating jobs {jobs_result}')
                 return
-            update_status_in_file('P3','S','Database jobs created successfully.')            
+            update_status_in_file('P4','S','Database jobs created successfully.')            
             update_status(private_ip, 'Database jobs created successfully.')
-        update_status_in_file('P3','S','Initial cube data populated successfully')       
-        update_status(private_ip, 'Initial cube data populated successfully')
+        update_status_in_file('P4','S','Initial cube data population started successfully.')       
+        update_status(private_ip, 'Initial cube data population started successfully.')
     except Exception as e:
         update_status(private_ip, f'Error occurred: {str(e)}')
         logging.error(f'Error occurred: {str(e)}', exc_info=True)
@@ -174,7 +174,7 @@ def run_postmigration_and_audit(credentials, private_ip, mode):
             update_status(private_ip, f'Execution of audittrigger app failed. {runaudit_result}')
             return
         
-        update_status_in_file('P2','S','Audit trigger app executed successfully.')        
+        update_status_in_file('P3','O','Audit trigger app executed successfully.')        
         update_status(private_ip, 'Audit trigger app executed successfully.')
 
         # Process 6: Postmigration Patch 2
@@ -193,8 +193,8 @@ def run_postmigration_and_audit(credentials, private_ip, mode):
             update_status_in_file('P3','F',f'Population of initial cube data failed. {cube_result}')
             update_status(private_ip, f'Population of initial cube data failed. {cube_result}')
             return
-        update_status_in_file('P3','O','Initial cube data populated successfully')       
-        update_status(private_ip, 'Initial cube data populated successfully')
+        update_status_in_file('P3','O','Initial cube data population started successfully.')       
+        update_status(private_ip, 'Initial cube data population started successfully.')
 
         # Process 8: Create Jobs (if drill mode)
         if mode == 'drill':
@@ -203,10 +203,10 @@ def run_postmigration_and_audit(credentials, private_ip, mode):
                 update_status_in_file('P3','F',f'Error while creating jobs {jobs_result}')
                 update_status(private_ip, f'Error while creating jobs {jobs_result}')
                 return
-            update_status_in_file('P3','S','Database jobs created successfully.')            
+            update_status_in_file('P4','S','Database jobs created successfully.')            
             update_status(private_ip, 'Database jobs created successfully.')
-        update_status_in_file('P3','S','Initial cube data populated successfully')       
-        update_status(private_ip, 'Initial cube data populated successfully')
+        update_status_in_file('P4','S','Initial cube data population started successfully.')       
+        update_status(private_ip, 'Initial cube data population started successfully.')
 
     except Exception as e:
         update_status(private_ip, f'Error occurred: {str(e)}')
@@ -230,8 +230,8 @@ def run_final_migration(credentials, private_ip, mode):
             update_status_in_file('P3','F',f'Population of initial cube data failed. {cube_result}')
             update_status(private_ip, f'Population of initial cube data failed. {cube_result}')
             return
-        update_status_in_file('P3','O','Initial cube data populated successfully')       
-        update_status(private_ip, 'Initial cube data populated successfully')
+        update_status_in_file('P3','O','Initial cube data population started successfully.')       
+        update_status(private_ip, 'Initial cube data population started successfully.')
 
         # Process 8: Create Jobs (if drill mode)
         if mode == 'drill':
@@ -240,10 +240,10 @@ def run_final_migration(credentials, private_ip, mode):
                 update_status_in_file('P3','F',f'Error while creating jobs {jobs_result}')
                 update_status(private_ip, f'Error while creating jobs {jobs_result}')
                 return
-            update_status_in_file('P3','S','Database jobs created successfully.')            
+            update_status_in_file('P4','S','Database jobs created successfully.')            
             update_status(private_ip, 'Database jobs created successfully.')
-        update_status_in_file('P3','S','Initial cube data populated successfully')       
-        update_status(private_ip, 'Initial cube data populated successfully')
+        update_status_in_file('P4','S','Initial cube data population started successfully.')       
+        update_status(private_ip, 'Initial cube data population started successfully.')
     except Exception as e:
         update_status(private_ip, f'Error occurred: {str(e)}')
         logging.error(f'Error occurred: {str(e)}', exc_info=True)
