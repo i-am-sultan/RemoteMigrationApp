@@ -5,3 +5,12 @@ How to update:
 3. make a zip of the app folder
 4. publish a new release with the latest version
 5. to check run the updator.py script
+
+
+
+Steps:
+
+P1: database creation, version check, credential update 
+P2: edb, rowcomp
+P3: postmig, audit
+P4: dblink, cube, jobs

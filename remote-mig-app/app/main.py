@@ -4,8 +4,9 @@ import logging
 import socket
 import argparse
 import json
-import google_sheet as gsheet
+import logging_config as logconf
 import log_sheet as logsheet
+import google_sheet as gsheet
 import database_creation as createdb
 import ora_pg_version_check as ora2pgversion
 import connection_update as credupdate
@@ -16,21 +17,12 @@ import run_post_mig_dblink_user as postmig2
 import run_cube_population as cube
 import run_create_jobs as jobs
 
-# Configuration
+# Configurationz
 MIGRATION_APP_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe'
 COMMON_POSTMIG_PATCH = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\postmigration.sql'
 AUDIT_TRIGGER_APP_PATH = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe'
 
-# Logging Configuration
-LOG_DIR = os.path.join(os.getcwd(), 'logs')
-# LOG_DIR = r'Z:\Remote\Log'
-# os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE_PATH = os.path.join(LOG_DIR, f'updator_log_{socket.gethostname()}.log')
-
-logging.basicConfig(filename=LOG_FILE_PATH, filemode='a',format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
-
 def update_status(sheet_ip, status_message):
-    logsheet.update_sheet(sheet_ip, 'Status', status_message)
     logging.info(status_message)
 
 def update_status_in_file(process_id, status, status_message):
@@ -41,7 +33,6 @@ def update_status_in_file(process_id, status, status_message):
             content["Process"] = process_id
             content["Status"] = status
             content["Message"] = status_message
-        
         with open(filepath,'w') as f:
             json.dump(content,f,indent=4)
         logging.info(f'Status updated in status.json')
@@ -205,6 +196,7 @@ def run_postmigration_and_audit(credentials, private_ip, mode):
                 return
             update_status_in_file('P4','S','Database jobs created successfully.')            
             update_status(private_ip, 'Database jobs created successfully.')
+
         update_status_in_file('P4','S','Initial cube data population started successfully.')       
         update_status(private_ip, 'Initial cube data population started successfully.')
 

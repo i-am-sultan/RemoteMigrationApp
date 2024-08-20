@@ -1,5 +1,7 @@
 import pandas as pd
 import socket
+import os 
+import logging
 from filelock import FileLock
 
 def get_private_ip():
@@ -13,7 +15,7 @@ def get_private_ip():
         return str(e)
 
 def update_sheet(remoteip, colname, message):
-    log_sheet = r'Z:\Remote\migration_log_sheet.xlsx'
+    log_sheet = r'Z:\Remote\Log\migration_log_sheet.xlsx'
     lock_file = log_sheet + '.lock'
     
     try:

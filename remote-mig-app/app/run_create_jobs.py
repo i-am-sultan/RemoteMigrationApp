@@ -4,6 +4,9 @@ import os
 import socket
 from google_sheet import *
 from log_sheet import *
+import sys
+import status_update
+import json
 
 # Logging Configuration
 LOG_DIR = os.path.join(os.getcwd(), 'logs')
@@ -41,8 +44,20 @@ def create_database_jobs(credentials):
             connection.close()
 
 if __name__ == "__main__":
-    private_ip = get_private_ip()
-    excel_df = access_sheet()
-    credentials = load_credentials_from_excel(excel_df,private_ip)
-    result = create_database_jobs(credentials)
-    update_sheet(private_ip,'Status',result)
+    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    with open(status_file_path,'r') as status_file:
+        status_content = json.load(status_file)
+    if status_content['Process'] == 'P4' and status_content['Status'] == 'O':
+        private_ip = get_private_ip()
+        excel_df = access_sheet()
+        credentials = load_credentials_from_excel(excel_df,private_ip)
+        if sys.argv[1] == 'drill':
+            jobs_result = create_database_jobs(credentials)
+            if jobs_result:
+                status_update.update_status_in_file('P4','F',f'Error while creating jobs {jobs_result}')
+            else:
+                status_update.update_status_in_file('P4','S','Migration completed (Database jobs created.)')   
+        elif sys.argv[1] == 'live':
+            status_update.update_status_in_file('P4','S','Migration completed (create jobs when you are done with testing.)') 
+        else:
+            logging.info('wrong choice given while creating jobs.')

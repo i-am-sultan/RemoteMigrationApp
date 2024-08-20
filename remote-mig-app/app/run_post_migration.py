@@ -4,6 +4,8 @@ import os
 import socket
 from google_sheet import *
 from log_sheet import *
+import status_update
+import json
 
 common_postmig_patch = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\postmigration.sql'
 
@@ -54,8 +56,15 @@ def execute_postmigration_script(credentials,patch_path):
             connection.close()
 
 if __name__ == "__main__":
-    private_ip = get_private_ip()
-    excel_df = access_sheet()
-    credentials = load_credentials_from_excel(excel_df,private_ip)
-    result = execute_postmigration_script(credentials,common_postmig_patch)
-    update_sheet(private_ip,'Status',result)
+    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    with open(status_file_path,'r') as status_file:
+        status_content = json.load(status_file)
+    if status_content['Process'] == 'P3' and status_content['Status'] == 'O':
+        private_ip = get_private_ip()
+        excel_df = access_sheet()
+        credentials = load_credentials_from_excel(excel_df,private_ip)
+        postmig_result = execute_postmigration_script(credentials,common_postmig_patch)
+        if postmig_result:
+            status_update.update_status_in_file('P3','F',f'Execution of postmigration failed. {postmig_result}')
+        else:
+            status_update.update_status_in_file('P3','O','Postmigration Executed Successfully, Audit app started ...')

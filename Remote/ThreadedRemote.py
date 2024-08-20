@@ -5,6 +5,7 @@ import paramiko
 import os
 import socket
 from PyQt5.QtCore import QThread, pyqtSignal
+import google_sheet as gsheet
 
 class SSHWorker(QThread):
     result = pyqtSignal(str, str)  # Signal to send the result back to the main thread
@@ -132,7 +133,7 @@ class MigrationApp(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    excel_file = r'Z:\\Remote\\PG Automation.xlsx'  # Path to your Excel file
-    ex = MigrationApp(excel_file)
+    excel_df = gsheet.access_sheet()
+    ex = MigrationApp(excel_df)
     ex.show()
     sys.exit(app.exec_())

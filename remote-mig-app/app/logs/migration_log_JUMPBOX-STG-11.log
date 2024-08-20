@@ -1,0 +1,117 @@
+2024-08-20 09:58:34,401 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 09:58:34,433 - INFO - Database "KTPL-DRILL" already exists.
+2024-08-20 09:58:34,433 - INFO - Database creation skipped because the database already exists.
+2024-08-20 09:58:34,433 - INFO - Status updated in status.json
+2024-08-20 09:58:37,515 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 09:58:37,608 - INFO - Success: Great, Version Matched!
+Oracle(12.22.4) and Postgres(12.22.4) Version are the same,now you can proceed with migration!
+2024-08-20 09:58:37,624 - INFO - Status updated in status.json
+2024-08-20 09:58:40,740 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 09:58:40,740 - INFO - OraCon updated successfully.
+2024-08-20 09:58:40,740 - INFO - pgCon updated successfully.
+2024-08-20 09:58:40,740 - INFO - config.json successfully updated.
+2024-08-20 09:58:40,740 - INFO - toolkit.properties updated successfully.
+2024-08-20 09:58:40,740 - INFO - connection.json updated successfully.
+2024-08-20 09:58:40,740 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-20 09:58:40,740 - INFO - Connections updated and files copied successfully.
+2024-08-20 09:58:40,740 - INFO - Status updated in status.json
+2024-08-20 10:32:32,994 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:32:33,025 - INFO - No row count mismatch. Data Migration successfull.
+2024-08-20 10:32:33,041 - INFO - Status updated in status.json
+2024-08-20 10:32:36,347 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:32:36,488 - INFO - 
+Error: Failed to execute postmigratoin C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\postmigration.sql on database KTPL-DRILL. Error: cannot truncate a table referenced in a foreign key constraint
+DETAIL:  Table "aud2_tab_col" references "aud2_module".
+HINT:  Truncate table "aud2_tab_col" at the same time, or use TRUNCATE ... CASCADE.
+
+2024-08-20 10:32:36,488 - INFO - Status updated in status.json
+2024-08-20 10:32:38,784 - INFO - C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe executed successfully.
+2024-08-20 10:32:38,784 - INFO - Status updated in status.json
+2024-08-20 10:32:42,031 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:32:45,136 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:32:45,199 - INFO - Procedure call "call main.db_pro_stk_bk_stockpointwise_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,199 - INFO - Procedure call "call main.db_pro_stk_bk_costadj_master_build('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,230 - INFO - Procedure call "call main.db_pro_stk_ageing_stockpointwise_firsttime();" executed successfully.
+2024-08-20 10:32:45,230 - INFO - Procedure call "call main.db_pro_stk_ageing_firsttime();" executed successfully.
+2024-08-20 10:32:45,230 - INFO - Procedure call "call main.db_pro_stk_bk_summary_stockpointwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,230 - INFO - Procedure call "call main.db_pro_stk_bk_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,246 - INFO - Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_inward('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-20 10:32:45,246 - INFO - Procedure call "call main.db_pro_stk_bk_costadj_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,246 - INFO - Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_outward('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-20 10:32:45,246 - INFO - Procedure call "call main.db_pro_sitetositemovement_not_in_outward();" executed successfully.
+2024-08-20 10:32:45,261 - INFO - Procedure call "call main.db_pro_stk_bk_summary_master_build('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,277 - INFO - Procedure call "call main.db_proc_sitetosite_intransum('2023-04-01');" executed successfully.
+2024-08-20 10:32:45,925 - INFO - Procedure call "call main.db_pro_compositegst_firsttimepopulation('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-20 10:32:45,925 - INFO - Status updated in status.json
+2024-08-20 10:45:58,072 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:45:58,104 - INFO - Database "KTPL-DRILL" does not exist.
+2024-08-20 10:45:58,120 - INFO - All connections to database "templatedb" have been terminated.
+2024-08-20 10:46:00,558 - INFO - Database "KTPL-DRILL" created successfully.
+2024-08-20 10:46:00,558 - INFO - Status updated in status.json
+2024-08-20 10:46:03,805 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:46:03,915 - INFO - Success: Great, Version Matched!
+Oracle(12.22.4) and Postgres(12.22.4) Version are the same,now you can proceed with migration!
+2024-08-20 10:46:03,915 - INFO - Status updated in status.json
+2024-08-20 10:46:07,098 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 10:46:07,098 - INFO - OraCon updated successfully.
+2024-08-20 10:46:07,098 - INFO - pgCon updated successfully.
+2024-08-20 10:46:07,098 - INFO - config.json successfully updated.
+2024-08-20 10:46:07,098 - INFO - toolkit.properties updated successfully.
+2024-08-20 10:46:07,098 - INFO - connection.json updated successfully.
+2024-08-20 10:46:07,113 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-20 10:46:07,113 - INFO - Connections updated and files copied successfully.
+2024-08-20 10:46:07,113 - INFO - Status updated in status.json
+2024-08-20 11:02:32,342 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 11:02:32,374 - INFO - No row count mismatch. Data Migration successfull.
+2024-08-20 11:02:32,374 - INFO - Status updated in status.json
+2024-08-20 11:02:35,535 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 11:03:14,326 - INFO - Success: Postmigration C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\postmigration.sql executed on database KTPL-DRILL.
+2024-08-20 11:03:14,326 - INFO - Status updated in status.json
+2024-08-20 11:03:44,679 - INFO - C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe executed successfully.
+2024-08-20 11:03:44,679 - INFO - Status updated in status.json
+2024-08-20 11:03:47,993 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 11:03:51,115 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 11:03:51,240 - INFO - Procedure call "call main.db_pro_sitetositemovement_not_in_outward();" executed successfully.
+2024-08-20 11:03:51,271 - INFO - Procedure call "call main.db_pro_stk_bk_costadj_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 11:03:51,318 - INFO - Procedure call "call main.db_pro_stk_bk_costadj_master_build('2023-04-01');" executed successfully.
+2024-08-20 11:03:51,318 - INFO - Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_inward('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-20 11:03:51,333 - INFO - Procedure call "call main.db_proc_sitetosite_intransum('2023-04-01');" executed successfully.
+2024-08-20 11:03:52,111 - INFO - Procedure call "call main.db_pro_stk_bk_stockpointwise_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 11:03:52,280 - INFO - Procedure call "call main.db_pro_stk_bk_batchwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 11:03:52,704 - INFO - Procedure call "call main.db_pro_compositegst_firsttimepopulation('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-20 11:03:52,782 - INFO - Procedure call "call main.db_pro_stk_ageing_firsttime();" executed successfully.
+2024-08-20 11:03:53,001 - INFO - Procedure call "call main.db_pro_stk_ageing_stockpointwise_firsttime();" executed successfully.
+2024-08-20 11:03:53,501 - INFO - Procedure call "call main.db_pro_stk_bk_summary_stockpointwise_master_build('2023-04-01');" executed successfully.
+2024-08-20 11:03:53,673 - INFO - Procedure call "call main.db_pro_sitetositemovement_firsttimepopulation_outward('2023-04-01', CURRENT_DATE);" executed successfully.
+2024-08-20 11:03:55,327 - INFO - Procedure call "call main.db_pro_stk_bk_summary_master_build('2023-04-01');" executed successfully.
+2024-08-20 11:03:55,327 - INFO - Status updated in status.json
+2024-08-20 12:44:53,623 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 12:44:53,650 - INFO - Database "KTPL-DRILL" already exists.
+2024-08-20 12:44:53,650 - INFO - Database creation skipped because the database already exists.
+2024-08-20 12:44:53,651 - INFO - Status updated in status.json
+2024-08-20 12:44:57,600 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 12:44:57,600 - INFO - OraCon updated successfully.
+2024-08-20 12:44:57,601 - INFO - pgCon updated successfully.
+2024-08-20 12:44:57,602 - INFO - config.json successfully updated.
+2024-08-20 12:44:57,602 - INFO - toolkit.properties updated successfully.
+2024-08-20 12:44:57,604 - INFO - connection.json updated successfully.
+2024-08-20 12:44:57,613 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-20 12:44:57,613 - INFO - Connections updated and files copied successfully.
+2024-08-20 12:44:57,614 - INFO - Status updated in status.json
+2024-08-20 12:45:16,138 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 12:45:16,166 - INFO - Database "KTPL-DRILL" already exists.
+2024-08-20 12:45:16,166 - INFO - Database creation skipped because the database already exists.
+2024-08-20 12:45:16,166 - INFO - Status updated in status.json
+2024-08-20 12:45:20,768 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 12:45:20,769 - INFO - OraCon updated successfully.
+2024-08-20 12:45:20,770 - INFO - pgCon updated successfully.
+2024-08-20 12:45:20,770 - INFO - config.json successfully updated.
+2024-08-20 12:45:20,771 - INFO - toolkit.properties updated successfully.
+2024-08-20 12:45:20,773 - INFO - connection.json updated successfully.
+2024-08-20 12:45:20,776 - INFO - OraCon.txt and pgCon.txt copied successfully.
+2024-08-20 12:45:20,776 - INFO - Connections updated and files copied successfully.
+2024-08-20 12:45:20,777 - INFO - Status updated in status.json
+2024-08-20 12:47:52,697 - INFO - Credentials successfully loaded from file Google Sheet {'oraSchema': 'KTPL', 'oraHost': '172.30.4.7', 'oraPort': np.int64(1521), 'oraPass': 'gmpl', 'oraService': 'ginesys', 'pgDbName': 'KTPL-DRILL', 'pgHost': 'psql-erp-stage-02.postgres.database.azure.com', 'pgPort': np.int64(5432), 'pgPass': 'gmpl', 'pgUser': 'gslpgadmin'}
+2024-08-20 12:47:52,744 - INFO - Database "KTPL-DRILL" already exists.
+2024-08-20 12:47:52,744 - INFO - Database creation skipped because the database already exists.
+2024-08-20 12:47:52,744 - INFO - Status updated in status.json

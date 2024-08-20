@@ -3,6 +3,7 @@ import os
 import logging
 import socket
 import argparse
+import psutil
 import google_sheet as gsheet
 import log_sheet as logsheet
 import ora_pg_version_check as ora2pgversion
@@ -27,12 +28,44 @@ LOG_FILE_PATH = os.path.join(LOG_DIR, f'migration_log_{socket.gethostname()}.log
 logging.basicConfig(filename=LOG_FILE_PATH, filemode='a',
                     format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
+def is_process_running(executable_path):
+    """Check if a process is running based on its executable path."""
+    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+        if proc.info['cmdline'] and executable_path.lower() in proc.info['cmdline'][0].lower():
+            return proc.info['pid']
+    return None
+
+def terminate_process(pid):
+    """Terminate a process given its PID."""
+    try:
+        process = psutil.Process(pid)
+        process.terminate()
+        process.wait(timeout=5)  # Wait for the process to terminate
+        logging.info(f"Terminated process with PID {pid}")
+    except psutil.NoSuchProcess:
+        logging.warning(f"No such process with PID {pid}")
+    except psutil.AccessDenied:
+        logging.warning(f"Access denied to terminate process with PID {pid}")
+    except Exception as e:
+        logging.error(f"Error terminating process with PID {pid}: {str(e)}")
+
+
 def update_status(sheet_ip, status_message):
     logsheet.update_sheet(sheet_ip, 'Status', status_message)
     logging.info(status_message)
 
 def run_all_processes(credentials, private_ip, mode):
     try:
+        # Path to the executable
+        migration_executable_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe'
+        
+        # Check if the migration executable is running
+        pid = is_process_running(migration_executable_path)
+        if pid:
+            logging.info(f"Migration executable is already running. PID: {pid}")
+            terminate_process(pid)  # Optionally terminate the process
+            update_status(private_ip, f"Terminated existing migration process with PID {pid}")
+
         # Process 1: Version Check
         version_check_result = ora2pgversion.compare_versions(credentials)
         if version_check_result:

@@ -6,6 +6,8 @@ import logging
 import pandas as pd
 from google_sheet import *
 from log_sheet import *
+import status_update
+import json
 
 log_dir = os.getcwd()
 log_file_path = os.path.join(log_dir,'logs',f'migration_log_{socket.gethostname()}.log')
@@ -43,11 +45,15 @@ def compare_versions(credentials):
         return msg
 
 if __name__ == "__main__":
-    private_ip = get_private_ip()
-    excel_df = access_sheet()
-    credentials = load_credentials_from_excel(excel_df,private_ip)
-    result = compare_versions(credentials)
-    if not result:
-        update_sheet(private_ip,'Status','Version Matched')
-    else:
-        update_sheet(private_ip,'Status',f'{result}')
+    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    with open(status_file_path,'r') as status_file:
+        status_content = json.load(status_file)
+    if status_content['Process'] == 'P1' and status_content['Status'] == 'O':
+        private_ip = get_private_ip()
+        excel_df = access_sheet()
+        credentials = load_credentials_from_excel(excel_df,private_ip)
+        version_check_result = compare_versions(credentials)
+        if version_check_result != 0:
+            status_update.update_status_in_file('P1','F',f'{version_check_result}')
+        else:
+            status_update.update_status_in_file('P1','O','DBVersion Matched')

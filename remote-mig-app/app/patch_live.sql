@@ -1,7 +1,7 @@
 CREATE EXTENSION DBLINK;
 CREATE SERVER foreign_pgbase
     FOREIGN DATA WRAPPER dblink_fdw
-    OPTIONS (dbname 'KTPL-DRILL', host 'psql-erp-stage-02.postgres.database.azure.com', port '5432');
+    OPTIONS (dbname 'STARTRON-PROD', host 'psql-erp-stage-02.postgres.database.azure.com', port '5432');
 
 ALTER SERVER foreign_pgbase
     OWNER TO gslpgadmin;
@@ -28,6 +28,19 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA main, public, gateway, ginview, ginarchive
 GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO ginesys_readwrite;
 
 -- DATABASE SPECIFIC
-REVOKE ALL ON DATABASE "KTPL-DRILL" FROM public;
-GRANT CONNECT ON DATABASE "KTPL-DRILL" TO ginesys_readonly_usr;
-GRANT CONNECT ON DATABASE "KTPL-DRILL" TO ginesys_readwrite_usr;
+REVOKE ALL ON DATABASE "STARTRON-PROD" FROM public;
+GRANT CONNECT ON DATABASE "STARTRON-PROD" TO ginesys_readonly_usr;
+GRANT CONNECT ON DATABASE "STARTRON-PROD" TO ginesys_readwrite_usr;
+/*
+call populate_first_time_migdata(); 
+
+call main.db_pro_sitetositemovement_firsttimepopulation_outward('2023-04-01', CURRENT_DATE);
+call main.db_pro_sitetositemovement_firsttimepopulation_inward('2023-04-01', CURRENT_DATE);
+call main.db_pro_sitetositemovement_not_in_outward();
+call main.db_proc_sitetosite_intransum('2023-04-01'); --start DATE
+--FOR COMPOSITE_GST:
+call main.db_pro_compositegst_firsttimepopulation('2023-04-01', CURRENT_DATE);
+--FOR STOCK BOOK SUMMARY:
+call main.db_pro_stk_bk_summary_master_build('2023-04-01');
+call db_pro_stk_ageing_firsttime();
+*/

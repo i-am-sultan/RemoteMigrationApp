@@ -2,6 +2,8 @@ from google_sheet import *
 from log_sheet import *
 import os
 import subprocess
+import status_update
+import json
 
 audittriggerapp_path = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1\TriggerConstraintViewCreationForAuditPostMigration.exe'
 
@@ -33,7 +35,14 @@ def run_audit_app(app_path):
         return str(e)
     
 if __name__ == '__main__':
-    remoteip = get_private_ip()
-    result = run_audit_app(audittriggerapp_path)
-    print(result)
-    update_sheet(remoteip,'Status',f"'{result}'")
+
+    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    with open(status_file_path,'r') as status_file:
+        status_content = json.load(status_file)
+    if status_content['Process'] == 'P3' and status_content['Status'] == 'O':
+        remoteip = get_private_ip()
+        runaudit_result = run_audit_app(audittriggerapp_path)
+        if runaudit_result:
+            status_update.update_status_in_file('P3','F',f'Execution of audittrigger app failed. {runaudit_result}')
+        else:
+            status_update.update_status_in_file('P4','O','Postmigration and Audit trigger app executed successfully. Postmig2 and cube population started...')  

@@ -3,6 +3,8 @@ from log_sheet import *
 import subprocess
 import os
 import psycopg2
+import status_update
+import json
 
 migrationapp_path = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\RunEDBCommand.exe'
 
@@ -14,6 +16,7 @@ logging.basicConfig(filename=LOG_FILE_PATH,filemode='a',format='%(asctime)s - %(
 
 def run_mig_app(app_path):
     command = app_path
+    logging.info(f'migration app {app_path} started...')
     try:
         process = subprocess.run(
             command,
@@ -21,6 +24,9 @@ def run_mig_app(app_path):
             text=True, #When set to True, will return the stdout and stderr as string, otherwise as bytes.
             check = True #a boolean value that indicates whether to check the return code of the subprocess, if check is true and the return code is non-zero, then subprocess `CalledProcessError` is raised.
         )
+        # logging.info(f'STDOUT: {process.stdout}')
+        # logging.error(f'STDERR: {process.stderr}')
+
         if process.returncode == 0:
             logging.info(f'{app_path} executed successfully.')
             return 0
@@ -55,6 +61,7 @@ def check_run_mig_status(credentials):
                 logging.warning(f'Row count mismatch for the table \n{table_name}: Oracle: {oracle_data_count}, Postgres: {postgres_data_count}\n')
                 return f'Row count mismatch for the table \n{table_name}: Oracle: {oracle_data_count}, Postgres: {postgres_data_count}\n'
             else:
+                logging.info('No row count mismatch. Data Migration successfull.')
                 return 0
         cur.close()
         pgcon.close()
@@ -63,15 +70,20 @@ def check_run_mig_status(credentials):
         return f'{str(e)}'
     
 if __name__ == '__main__':
-    private_ip = get_private_ip()
-    excel_df = access_sheet()
-    credentials = load_credentials_from_excel(excel_df, private_ip)
-    app_run_result = run_mig_app(migrationapp_path)
-    print(app_run_result)
-    check_run_mig_status = check_run_mig_status(credentials)
-    
-    if check_run_mig_status == 0:
-        print('Run mig app failed')
-    else:
-        print('Run mig app succes')
-    update_sheet(private_ip,'Status',f"Run mig app failed")
+    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    with open(status_file_path,'r') as status_file:
+        status_content = json.load(status_file)
+    if status_content['Process'] == 'P2' and status_content['Status'] == 'O':
+        try:
+            private_ip = get_private_ip()
+            excel_df = access_sheet()
+            credentials = load_credentials_from_excel(excel_df, private_ip)
+            # app_run_result = run_mig_app(migrationapp_path)
+            # print(app_run_result)
+            check_run_mig_status = check_run_mig_status(credentials)
+            print(check_run_mig_status)
+            if check_run_mig_status:
+                status_update.update_status_in_file('P2','F', f'Migration failed! {check_run_mig_status}')
+            status_update.update_status_in_file('P3','O','Data migration succeeded! (with no row count mismatch). Postmigration started...')
+        except Exception as e:
+            logging.error(f'An unexpected error occurred: {e}', exc_info=True)

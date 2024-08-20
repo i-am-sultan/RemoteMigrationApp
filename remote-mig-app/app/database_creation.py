@@ -3,6 +3,7 @@ import logging
 import os 
 import socket
 import google_sheet as gsheet
+import status_update 
 
 # Logging Configuration
 log_dir = os.path.join(os.getcwd(), 'logs')
@@ -126,9 +127,11 @@ if __name__ == '__main__':
         private_ip = gsheet.get_private_ip()
         all_credentials = gsheet.access_sheet()
         credentials = gsheet.load_credentials_from_excel(all_credentials, private_ip)
-        source_db = 'maintenance_dev'
-        db_creation_result = create_database(credentials,source_db)
-        print(db_creation_result)
+        createdb_result = create_database(credentials,'templatedb')
+        if createdb_result:
+            status_update.update_status_in_file('P1','F',f'{createdb_result}')
+        else:
+            status_update.update_status_in_file('P1','O','Database setup done')
     except Exception as e:
         logging.error(f'Unexpected error: {e}')
         print(f'An unexpected error occurred: {e}')

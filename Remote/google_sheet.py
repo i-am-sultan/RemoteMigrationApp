@@ -3,12 +3,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 import socket
 import logging
 import pandas as pd
-import os
-
-log_dir = r'C:\Program Files\edb\prodmig\remote-mig-app\app\logs'
-os.makedirs(log_dir, exist_ok=True)
-log_file_path = os.path.join(log_dir, f'migration_log_{socket.gethostname()}.log')
-logging.basicConfig(filename=log_file_path, filemode='a', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 def get_private_ip():
     try:
@@ -27,7 +21,7 @@ def get_private_ip():
 def access_sheet():
     # Define the scope
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(r'C:\Program Files\edb\prodmig\remote-mig-app\app\project-remote-migration-app-d57c81bf8332.json')
+    creds = ServiceAccountCredentials.from_json_keyfile_name(r'project-remote-migration-app-d57c81bf8332.json')
     client = gspread.authorize(creds)
     sheet = client.open('ginesys-remote-migration-sheet').sheet1
     data = sheet.get_all_records()

@@ -7,6 +7,7 @@ import json
 import shutil
 from google_sheet import *
 from log_sheet import *
+import status_update
 
 # File Paths
 ORACON_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
@@ -68,7 +69,7 @@ def updateOraCon(OraSchema, OraHost, OraPort, OraPass, OraService, filepath):
         return f'{e}'
 
 def updatepgCon(pgHost, pgPort, pgUser, pgPass, pgDbName, filepath):
-    content = (f"Server={pgHost};Port={pgPort};Database={pgDbName};User Id={pgUser};Password={pgPass};ApplicationName=w3wp.exe;")
+    content = (f"Server={pgHost};Port={pgPort};Database={pgDbName};User Id={pgUser};Password={pgPass};ApplicationName=w3wp.exe;Ssl Mode=Require;")
     # content = (f"Server={pgHost};Port={pgPort};Database={pgDbName};User Id={pgUser};Password={pgPass};ApplicationName=w3wp.exe;Ssl Mode=Require;")
     try:
         with open(filepath, 'w') as f1:
@@ -140,16 +141,20 @@ def copyFiles(destination_dir):
         return False
 
 if __name__ == "__main__":
-    try:
-        private_ip = get_private_ip()
-        excel_df = access_sheet()
-        credentials = load_credentials_from_excel(excel_df, private_ip)
-        result = update_connections(credentials)
-        if result:
-            print(result)
-            update_sheet(private_ip,'Status',f'{result}')
-            logging.info('Status updated in Google Sheet.')
-        else:
-            logging.error('Credentials not updated. Check error log.')
-    except Exception as e:
-        logging.error(f'An unexpected error occurred: {e}', exc_info=True)
+    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    with open(status_file_path,'r') as status_file:
+        status_content = json.load(status_file)
+    if status_content['Process'] == 'P1' and status_content['Status'] == 'O':
+        try:
+            private_ip = get_private_ip()
+            excel_df = access_sheet()
+            credentials = load_credentials_from_excel(excel_df, private_ip)
+            cred_update_result = update_connections(credentials)
+            if cred_update_result:
+                status_update.update_status_in_file('P1','F',f'{cred_update_result}')
+            else:
+                status_update.update_status_in_file('P2','O','Credentials updated successfully. EDB toolkit started...')
+        except Exception as e:
+            logging.error(f'An unexpected error occurred: {e}', exc_info=True)
+    else :
+        print(status_content)

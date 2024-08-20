@@ -1,0 +1,14 @@
+2024-08-12 14:42:08,487 - INFO - 
+Error: No entry found for the remote host 192.168.1.124
+2024-08-12 14:42:43,612 - INFO - 
+Error: No entry found for the remote host 192.168.1.124
+2024-08-12 14:42:46,258 - INFO - Error occurred: 'pgHost'
+2024-08-12 14:42:46,273 - ERROR - Error occurred: 'pgHost'
+Traceback (most recent call last):
+  File "C:\Users\sultan.m\Documents\Ginesys\RemoteMigrationApp\remote-mig-app\app\main.py", line 56, in run_all_processes
+    createdb_result = createdb.create_database(credentials,'templatedb')
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\sultan.m\Documents\Ginesys\RemoteMigrationApp\remote-mig-app\app\database_creation.py", line 78, in create_database
+    pgHost = credentials['pgHost']
+             ~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'pgHost'
