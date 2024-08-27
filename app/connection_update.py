@@ -147,8 +147,8 @@ if __name__ == "__main__":
     if status_content['Process'] == 'P1' and status_content['Status'] == 'O':
         try:
             private_ip = get_private_ip()
-            excel_df = access_sheet()
-            credentials = load_credentials_from_excel(excel_df, private_ip)
+            credentials = load_credentials_from_json(private_ip)
+
             cred_update_result = update_connections(credentials)
             if cred_update_result:
                 status_update.update_status_in_file('P1','F',f'{cred_update_result}')
@@ -158,4 +158,4 @@ if __name__ == "__main__":
         except Exception as e:
             logging.error(f'An unexpected error occurred: {e}', exc_info=True)
     else :
-        print(status_content)
+        logging.info('Process and Status is not matching to run connection_update.py')

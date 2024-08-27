@@ -1,5 +1,6 @@
 /*SELECT pg_size_pretty(sum(pg_relation_size(quote_ident(schemaname) || '.' || quote_ident(tablename)))::bigint) 
 FROM pg_tables*/
+
 TRUNCATE INT$ERROR_LOG;
 UPDATE gateway.installation SET db_username = 'main';
 
@@ -16823,7 +16824,7 @@ BEGIN
 END $$;
 
 --Not Valid Check Constraint
-																 
+/*																 
 ALTER TABLE finjrnmain ADD CONSTRAINT c_finjrnmain_glcode_slcode CHECK ((((glcode IS NULL) AND (slcode IS NULL)) OR ((glcode IS NOT NULL) AND (slcode IS NOT NULL)))) NOT VALID;
 ALTER TABLE invdcmain ADD CONSTRAINT c_invdcmain_scheme_docno CHECK ((scheme_docno IS NOT NULL)) NOT VALID;
 ALTER TABLE invgrcmain ADD CONSTRAINT c_invgrcmain_scheme_docno CHECK ((scheme_docno IS NOT NULL)) NOT VALID;
@@ -30047,7 +30048,8 @@ CREATE INDEX IF NOT EXISTS userlistpreffilter_lk03 ON main.userlistpreffilter US
 CREATE INDEX IF NOT EXISTS userlistprefsortorder_lk01 ON main.userlistprefsortorder USING btree (appuserid);
 CREATE INDEX IF NOT EXISTS userlistprefsortorder_lk02 ON main.userlistprefsortorder USING btree (lastmodifiedby);
 CREATE INDEX IF NOT EXISTS userlistprefsortorder_lk03 ON main.userlistprefsortorder USING btree (mdlistid);
-
+*/
+CALL execute_ddl_statements();
 
 	
 UPDATE ROLEMENU

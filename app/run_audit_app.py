@@ -35,7 +35,6 @@ def run_audit_app(app_path):
         return str(e)
     
 if __name__ == '__main__':
-
     status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)

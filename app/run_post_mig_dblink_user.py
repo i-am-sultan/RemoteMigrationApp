@@ -112,17 +112,18 @@ def execute_sql_patch(credentials, patch_choice):
         return f"'{e}'"
 
 if __name__ == "__main__":
-
     status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
-    if status_content['Process'] == 'P4' and status_content['Status'] == 'O':
+    if (status_content['Process'] == 'P4' and status_content['Status'] == 'O') or (status_content['Process'] == 'P4' and status_content['Status'] == 'F'):
         private_ip = get_private_ip()
-        excel_df = access_sheet()
-        credentials = load_credentials_from_excel(excel_df,private_ip)
+        # excel_df = access_sheet()
+        credentials = load_credentials_from_json(private_ip)
         print(credentials)
         postmig2_result = execute_sql_patch(credentials,sys.argv[1])
         if postmig2_result:
             status_update.update_status_in_file('P4','F',f'Execution of dblink and user creation failed. {postmig2_result}')
         else:
-            status_update.update_status_in_file('P4','O','Postmigration patch 2(dblink, usermanagement) executed successfully, cube population started ...') 
+            status_update.update_status_in_file('P5','O','Postmigration patch 2(dblink, usermanagement) executed successfully, cube population started ...') 
+    else:
+        logging.info('Process and Status is not matching to run run_post_mig_dblink_user.py')

@@ -50,10 +50,11 @@ if __name__ == "__main__":
         status_content = json.load(status_file)
     if status_content['Process'] == 'P1' and status_content['Status'] == 'O':
         private_ip = get_private_ip()
-        excel_df = access_sheet()
-        credentials = load_credentials_from_excel(excel_df,private_ip)
+        credentials = load_credentials_from_json(private_ip)
         version_check_result = compare_versions(credentials)
         if version_check_result !=0:
             status_update.update_status_in_file('P1','F',f'{version_check_result}')
         else:
             status_update.update_status_in_file('P1','O','DBVersion Matched')
+    else:
+        logging.info('Process and Status is not matching to run ora_pg_version_check.py')

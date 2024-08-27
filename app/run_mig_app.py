@@ -73,13 +73,10 @@ if __name__ == '__main__':
     status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
-    if status_content['Process'] == 'P2' and status_content['Status'] == 'O':
+    if (status_content['Process'] == 'P2' and status_content['Status'] == 'O') or (status_content['Process'] == 'P2' and status_content['Status'] == 'F'):
         try:
             private_ip = get_private_ip()
-            excel_df = access_sheet()
-            credentials = load_credentials_from_excel(excel_df, private_ip)
-            # app_run_result = run_mig_app(migrationapp_path)
-            # print(app_run_result)
+            credentials = load_credentials_from_json(private_ip)
             check_run_mig_status = check_run_mig_status(credentials)
             print(check_run_mig_status)
             if check_run_mig_status:
@@ -87,3 +84,5 @@ if __name__ == '__main__':
             status_update.update_status_in_file('P3','O','Data migration succeeded! (with no row count mismatch). Postmigration started...')
         except Exception as e:
             logging.error(f'An unexpected error occurred: {e}', exc_info=True)
+    else:
+        logging.info('Process and Status is not matching to run run_mig_app.py')

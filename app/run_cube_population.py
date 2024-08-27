@@ -79,27 +79,32 @@ def run_cube_population(credentials):
         for future in as_completed(future_to_proc):
             proc = future_to_proc[future]
             try:
-                result = future.result()
-                results.append(str(result))
+                # result = future.result()
+                # results.append(str(result))
+                results = 0
             except Exception as e:
                 logging.error(f'Error while executing procedure: {e}')
                 results.append(f'Error while executing procedure: {e}')
     
     # Combine all results
-    combined_result = '\n'.join(results)
-    return combined_result
+    if results:
+        results = '\n'.join(results)
+    return results
 
 if __name__ == '__main__':
     status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
-    if status_content['Process'] == 'P4' and status_content['Status'] == 'O':
+    if (status_content['Process'] == 'P5' and status_content['Status'] == 'O') or (status_content['Process'] == 'P5' and status_content['Status'] == 'F'):
         private_ip = get_private_ip()
-        excel_df = access_sheet()
-        credentials = load_credentials_from_excel(excel_df, private_ip)
+        # excel_df = access_sheet()
+        # credentials = load_credentials_from_excel(excel_df, private_ip)
+        credentials = load_credentials_from_json(private_ip)
         cube_result = run_cube_population(credentials)
         if cube_result != 0:
             status_update.update_status_in_file('P5','F',f'Population of initial cube data failed. {cube_result}')
         else:
-            status_update.update_status_in_file('P5','O','Initial cube data population started successfully. Creating jobs(if drill)...')       
+            status_update.update_status_in_file('P6','O','Initial cube data population started successfully. Creating jobs(if drill)...')       
         # update_sheet(private_ip, 'Status', f"'{result}'")
+    else:
+        logging.info('Process and Status is not matching to run run_cube_population.py')

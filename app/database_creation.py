@@ -23,7 +23,6 @@ def check_if_exists_samedb(credentials):
     query = 'SELECT 1 FROM pg_database WHERE datname = %s;'
     connection = None
     cursor = None
-    
     try:
         # Connect to the default 'postgres' database to check for existence
         connection = psycopg2.connect(database='postgres', user=pgUserName, password=pgPass, host=pgHost, port=pgPort)
@@ -77,25 +76,39 @@ def terminate_connections(credentials,source_db):
             connection.close()
 
 def create_database(credentials,source_db):
+
     pgHost = credentials['pgHost']
     pgPort = credentials['pgPort']
     pgUserName = credentials['pgUser']
     pgPass = credentials['pgPass']
     pgDbname = credentials['pgDbName']
 
-    # Terminate other connections to the database
-    terminate_connections(credentials,pgDbname)
-
     if check_if_exists_samedb(credentials):
+
+        # Terminate other connections to the database
+        terminate_connections(credentials,pgDbname)
+
         logging.info('Database already exists. Trying to drop the existing database...')
         db_drop_content = f'DROP DATABASE IF EXISTS "{pgDbname}";'
+        unschedule_job_content = f'''   do $$
+                                        declare
+                                            i int;
+                                        begin
+                                            for i in (select jobid from cron.job where database = '{pgDbname}')
+                                            loop
+                                                execute format('select cron.unschedule(%s)', i);
+                                            end loop;
+                                        end $$;'''
         connection = None
+        cursor = None
         try:
             connection = psycopg2.connect(database='postgres', user=pgUserName, password=pgPass, host=pgHost, port=pgPort)
             connection.autocommit = True  # Disable transaction block
             cursor = connection.cursor()
             cursor.execute(db_drop_content)
             logging.info('Database successfully dropped.')
+            cursor.execute(unschedule_job_content)
+            logging.info('Unscheduled the jobs if it was already existed.')
         except Exception as e:
             logging.error(f'Error dropping the database: {e}')
             return f'Error dropping the database: {e}'
@@ -111,7 +124,7 @@ def create_database(credentials,source_db):
 
     content = f'''CREATE DATABASE "{pgDbname}"
                 WITH
-                OWNER = gslpgadmin
+                OWNER = {pgUserName}
                 ENCODING = 'UTF8'
                 LC_COLLATE = 'C'
                 LC_CTYPE = 'C'
@@ -127,7 +140,7 @@ def create_database(credentials,source_db):
         connection.autocommit = True  # Disable transaction block
         cursor = connection.cursor()
         cursor.execute(content)
-        cursor.execute(f'''  ALTER DATABASE "{pgDbname}"
+        cursor.execute(f''' ALTER DATABASE "{pgDbname}"
                                 SET search_path TO main, public, gateway, ginview, ginarchive;
                             ALTER DATABASE "{pgDbname}"
                                 SET "TimeZone" TO 'Asia/Kolkata';''')
@@ -150,12 +163,11 @@ if __name__ == '__main__':
     try:
         private_ip = gsheet.get_private_ip()
         all_credentials = gsheet.access_sheet()
-        credentials = gsheet.load_credentials_from_excel(all_credentials, private_ip)
-        print(credentials)
-        # json_credentials = credentials.to_json(orient='records')
-        #save the json file
-        # save_json_to_file('C:\Users\sultan.m\Desktop\cred.json')
+        gsheet.save_json_to_file(all_credentials, r'C:\Users\ginesysdevops\Desktop\migration_status\credentials.json')
+        # credentials = gsheet.load_credentials_from_excel(all_credentials, private_ip)
+        credentials = gsheet.load_credentials_from_json(private_ip)
         createdb_result = create_database(credentials,'templatedb')
+        createdb_result = None
         if createdb_result:
             status_update.update_status_in_file('P1','F',f'{createdb_result}')
         else:
