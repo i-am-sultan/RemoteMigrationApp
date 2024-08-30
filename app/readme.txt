@@ -15,7 +15,14 @@ P2: edb, rowcomp
 P3: postmig, audit
 P4: dblink
 P5: cube
-P6: jobs
+P6: barcode ctrl file
+P7: jobs
+P8: report integration
 
 Note:
 change the credentials in schedule_jobs_in_postgres();
+
+
+Version 0.2.1:
+
+Barcode control incorporated.

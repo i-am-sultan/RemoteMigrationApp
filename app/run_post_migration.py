@@ -54,6 +54,7 @@ def execute_postmigration_script(credentials,patch_path):
             cursor.close()
         if connection:
             connection.close()
+
 def check_postmigration_status(credentials):
     pgHost = credentials['pgHost']
     pgPort = credentials['pgPort']
@@ -73,8 +74,8 @@ def check_postmigration_status(credentials):
         connection.commit()
         logging.info(f'Postmigration status check successfull.')
         if ddl_failure_count:
-            logging.info(f'Postmigration executed with {ddl_failure_count} error. Please check the ddl_failure table for the logs.')
-            return f'Postmigration executed with {ddl_failure_count} error. Please check the ddl_failure table for the logs.'
+            logging.info(f'Postmigration executed {ddl_failure_count}. \nWarning: Please check the ddl_failure table for the logs.')
+            return f'Postmigration executed {ddl_failure_count}. Warning: Please check the ddl_failure table for the logs.'
         else:
             logging.info('No data found in table ddl_failure')
             return 0

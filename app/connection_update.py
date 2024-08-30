@@ -16,6 +16,7 @@ SCHEMA_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\Config.
 TOOLKIT_PATH = r'C:\Program Files\edb\mtk\etc\toolkit.properties'
 CONNECTION_JSON_PATH = r'C:\Program Files\edb\prodmig\Ora2PGCompToolKit\Debug\Connection.json'
 AUDIT_PATH = r'C:\Program Files\edb\prodmig\AuditTriggerCMDNew\netcoreapp3.1'
+BARCODE_PATH = r'C:\Program Files\edb\prodmig\BarcodeFile\netcoreapp3.1'
 
 # Logging Configuration
 LOG_DIR = os.path.join(os.getcwd(), 'logs')
@@ -43,7 +44,7 @@ def update_connections(credentials):
                              credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], CONNECTION_JSON_PATH)
 
         # Copy the files to the destination directory
-        if copyFiles(AUDIT_PATH):
+        if copyFiles(AUDIT_PATH) and copyFiles(BARCODE_PATH):
             logging.info('Connections updated and files copied successfully.')
             return 0
         else:

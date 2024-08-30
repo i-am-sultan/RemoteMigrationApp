@@ -6,7 +6,10 @@ TRUNCATE TABLE Psite_webdb_configuration;
 
 -- Update operations
 UPDATE GDS2_Subscr SET webhookurl = NULL;
-UPDATE GATEWAY.PACKDEF SET sw_licensedata = null, sw_licensestatus = null;
+-- UPDATE GATEWAY.PACKDEF SET sw_licensedata = null, sw_licensestatus = null;
+
+update gateway.packdef 
+set sw_serial = 'RND',sw_licensestatus = null,sw_licensedata = null;
 
 -- Create extension
 CREATE EXTENSION DBLINK;
