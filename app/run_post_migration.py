@@ -69,7 +69,7 @@ def check_postmigration_status(credentials):
         # Connect to the PostgreSQL database
         connection = psycopg2.connect(database=pgDbname, user=pgUserName, password=pgPass, host=pgHost, port=pgPort)
         cursor = connection.cursor()
-        cursor.execute('select count(*) from ddl_failure')
+        cursor.execute('select count(*) from ddl_failures')
         ddl_failure_count = cursor.fetchone()[0]
         connection.commit()
         logging.info(f'Postmigration status check successfull.')

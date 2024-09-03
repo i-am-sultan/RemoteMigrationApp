@@ -18,12 +18,13 @@ os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE_PATH = os.path.join(LOG_DIR, f'migration_log_{socket.gethostname()}.log')
 logging.basicConfig(filename=LOG_FILE_PATH,filemode='a',format='%(asctime)s - %(levelname)s - %(message)s',level=logging.INFO)
 
-def updatePatchDrill(pgDbname, pgUser, pgPass, filepath):
+def updatePatchDrill(pgHostname, pgDbname, pgUser, pgPass, filepath):
     try:
         with open(filepath, 'r') as f:
             content = f.read()
 
-        # Modify the content to replace password and username
+        # Modify the content to replace hostname and password and username
+        content = re.sub(r"host ''[^']+''", f"host ''{pgHostname}''", content)
         content = re.sub(r"OPTIONS \(password '[^']+\'", f"OPTIONS (password '{pgPass}'", content)
         content = re.sub(r"\"user\" '[^']+'", f"\"user\" '{pgUser}'", content)
 
@@ -36,12 +37,13 @@ def updatePatchDrill(pgDbname, pgUser, pgPass, filepath):
         logging.info(f'\nError updating patch_drill.sql: {e}')
         return f'\nError updating patch_drill.sql: {e}'
 
-def updatePatchLive(pgDbname, pgUser, pgPass, filepath):
+def updatePatchLive(pgHostname, pgDbname, pgUser, pgPass, filepath):
     try:
         with open(filepath, 'r') as f:
             content = f.read()
 
         # Modify the content to replace password and username
+        content = re.sub(r"host ''[^']+''", f"host ''{pgHostname}''", content)
         content = re.sub(r"OPTIONS \(password '[^']+\'", f"OPTIONS (password '{pgPass}'", content)
         content = re.sub(r"\"user\" '[^']+'", f"\"user\" '{pgUser}'", content)
 
@@ -93,14 +95,14 @@ def execute_sql_patch(credentials, patch_choice):
     global patch_live_path
     try:
         if patch_choice == "drill":
-            result = updatePatchDrill(credentials['pgDbName'],credentials['pgUser'], credentials['pgPass'], patch_drill_path)
+            result = updatePatchDrill(credentials['pgHost'], credentials['pgDbName'],credentials['pgUser'], credentials['pgPass'], patch_drill_path)
             if result == 0:
                 result = executePatch(credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], patch_drill_path)
                 return result
             else:
                 return result
         elif patch_choice == "live":
-            result = updatePatchLive(credentials['pgDbName'],credentials['pgUser'], credentials['pgPass'], patch_live_path)
+            result = updatePatchLive(credentials['pgHost'], credentials['pgDbName'],credentials['pgUser'], credentials['pgPass'], patch_live_path)
             if result == 0:
                 result = executePatch(credentials['pgHost'], credentials['pgPort'], credentials['pgUser'], credentials['pgPass'], credentials['pgDbName'], patch_live_path)
                 return result
@@ -116,7 +118,6 @@ if __name__ == "__main__":
         status_content = json.load(status_file)
     if (status_content['Process'] == 'P4' and status_content['Status'] == 'O') or (status_content['Process'] == 'P4' and status_content['Status'] == 'F'):
         private_ip = get_private_ip()
-        # excel_df = access_sheet()
         credentials = load_credentials_from_json(private_ip)
         print(credentials)
         postmig2_result = execute_sql_patch(credentials,sys.argv[1])

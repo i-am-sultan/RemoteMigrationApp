@@ -17,7 +17,6 @@ CREATE EXTENSION DBLINK;
 DO $$
 DECLARE
     dbname text := current_database(); -- Current database name
-    hostname text := inet_server_addr(); -- Current server's IP address
     port int := inet_server_port(); -- Current server's port
     username text := current_user; -- Current username
 BEGIN
@@ -25,8 +24,8 @@ BEGIN
     EXECUTE format('
         CREATE SERVER foreign_pgbase
         FOREIGN DATA WRAPPER dblink_fdw
-        OPTIONS (dbname ''%s'', host ''%s'', port ''%s'')',
-        dbname, split_part(hostname, '/', 1), port);
+        OPTIONS (dbname ''%s'', host ''psql-erp-stage-02.postgres.database.azure.com'', port ''%s'')',
+        dbname, port);
 
     -- Alter server owner
     EXECUTE format('ALTER SERVER foreign_pgbase OWNER TO %I', username);

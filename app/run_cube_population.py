@@ -104,7 +104,7 @@ if __name__ == '__main__':
         if cube_result != 0:
             status_update.update_status_in_file('P5','F',f'Population of initial cube data failed. {cube_result}')
         else:
-            status_update.update_status_in_file('P6','O','Initial cube data population started successfully. Creating jobs(if drill)...')       
+            status_update.update_status_in_file('P6','O','Initial cube data population started successfully. Barcode ctrl.exe executed...')       
         # update_sheet(private_ip, 'Status', f"'{result}'")
     else:
         logging.info('Process and Status is not matching to run run_cube_population.py')

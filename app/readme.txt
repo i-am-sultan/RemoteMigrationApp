@@ -1,3 +1,12 @@
+How to start migration:
+
+1. Fill all the required credentials in the google sheet(Make sure it's the clone oracle VM only, not live ones :( )
+2. Turn on all the jumpboxes and source oracle VMs
+3. Open the MasterVM exe 
+4. Click on "Generate Script" -> Select the VMs -> Copy&Paste and run the scripts in admin Powershell
+5. Click on "Test Connection" -> Click on "Update VMs" -> Check the updator logs in one jumpbox 
+6. Click on "Run all" -> Click on "View Progress" -> Check the migration logs
+
 How to update:
 
 1. update the version file
@@ -5,8 +14,6 @@ How to update:
 3. make a zip of the app folder
 4. publish a new release with the latest version
 5. to check run the updator.py script
-
-
 
 Steps:
 
