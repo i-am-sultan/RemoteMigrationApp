@@ -3,6 +3,7 @@ import json
 
 def update_status_in_file(process_id, status, status_message):
     filepath = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    # filepath = r'C:\Users\sultan.m\Desktop\migration_status\status.json'
     try:
         with open(filepath,'r') as file:
             content = json.load(file)

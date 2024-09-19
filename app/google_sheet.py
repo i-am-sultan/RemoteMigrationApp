@@ -41,7 +41,7 @@ def access_sheet(retries=10, wait_time=30):
             data = sheet.get_all_records()
             df = pd.DataFrame(data)
             # Convert the DataFrame to a JSON string
-            json_data = df.to_json(orient='records')
+            json_data = df.to_json(orient='records', indent=4)
             return json_data
         
         except APIError as e:
@@ -82,13 +82,77 @@ def load_credentials_from_excel(excel_df, remoteip):
         logging.error(f"Error loading credentials from the Google Sheet: {e}")
     return credentials
 
+def validate_columns(json_data, required_columns):
+    """
+    Validate that the required columns exist in the given JSON object.
+    
+    Parameters:
+    json_data (dict): The JSON object where keys represent column names.
+    required_columns (list): The list of required columns.
+    
+    Returns:
+    str: A message indicating missing columns if any, otherwise None.
+    """
+    # Check if required columns exist in the JSON object
+    missing_columns = [col for col in required_columns if col not in json_data]
+    if missing_columns:
+        logging.error(f"Missing required columns: {', '.join(missing_columns)}")
+        return f"Missing required columns: {', '.join(missing_columns)}"
+    
+    # Return None if no columns are missing
+    logging.info('All required columns are present.')
+    return 0
+
+
+    # Check for null or empty values in the required columns
+    # for column in required_columns:
+    #     if df[column].isnull().any():
+    #         logging.error(f"Null or empty values found in column: {column}")
+    #         # raise Exception(f"Null or empty values found in column: {column}")
+    #         return f"Null or empty values found in column: {column}"
+    # logging.info("All required columns are present and contain no null values.")
+    return 0
+
+def validate_json_credentials(credentials):
+    try:
+        # Check if credentials is None
+        if credentials is None:
+            logging.error("Credentials object is None.")
+            return "Credentials object is None."
+
+        # List of required fields in the credentials
+        required_fields = [
+            'migType', 'oraSchema', 'oraHost', 'oraPort', 'oraPass', 'oraService',
+            'pgDbName', 'pgHost', 'pgPort', 'pgPass', 'pgUser'
+        ]
+
+        # Check if any required fields are missing or have a None value
+        missing_fields = [field for field in required_fields if credentials.get(field) is None]
+
+        if missing_fields:
+            logging.error(f"Missing or null values for fields: {', '.join(missing_fields)}")
+            return f"Missing or null values for fields: {', '.join(missing_fields)}"
+        
+        logging.info("All required fields are present and non-null in the credentials.")
+        return None  # Return None if everything is valid
+    
+    except AttributeError:
+        logging.error("Invalid type for credentials object. It must be a dictionary-like object.")
+        return "Invalid type for credentials object. It must be a dictionary-like object."
+
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")
+        return f"An unexpected error occurred: {e}"
+    
 def load_credentials_from_json(remoteip):
     try:
         with open(r"C:\Users\ginesysdevops\Desktop\migration_status\credentials.json", 'r') as jsonfile:
+        # with open(r"C:\Users\sultan.m\Desktop\migration_status\credentials.json", 'r') as jsonfile:
             content = json.load(jsonfile)
             for entry in content:
-                if entry.get('PrivateIP') == remoteip:
+                if entry.get('JBPrivateIP') == remoteip:
                     credentials = {
+                        'migType': entry.get('Type'),
                         'oraSchema': entry.get('OraSchema'),
                         'oraHost': entry.get('OraHost'),
                         'oraPort': entry.get('OraPort'),
@@ -100,12 +164,18 @@ def load_credentials_from_json(remoteip):
                         'pgPass': entry.get('PgPass'),
                         'pgUser': entry.get('PgUser')
                     }
+                    # validation_result = validate_json_credentials(credentials)
+                    # if validation_result is None:
                     logging.info(f"Credentials successfully loaded from JSON for IP: {remoteip}")
                     return credentials
-            logging.warning(f"No entry found for the remote host {remoteip}")
+                    # else:
+                    #     raise Exception(f'{validation_result}')
+                        # return validation_result  # Return validation error message
+                else:
+                    logging.warning(f"No entry found for the remote host {remoteip}")
     except Exception as e:
         logging.error(f"Error loading credentials from the JSON file: {e}")
-    return None
+        return None
 
 # Step 3: Save the JSON data to a file
 def save_json_to_file(json_data, filename):
@@ -121,18 +191,30 @@ if __name__ == "__main__":
     print(f"Private IP: {private_ip}")
 
     try:
-        # Access Google Sheet and save the data to a JSON file
-        json_data = access_sheet()
-        save_json_to_file(json_data, r"C:\Users\ginesysdevops\Desktop\migration_status\credentials.json")
+        # Access Google Sheet and get data as DataFrame
+        df = access_sheet()
 
-        # Load credentials based on the private IP address
-        credentials = load_credentials_from_json(private_ip)
-        
-        if credentials:
-            print(credentials)
-            print("Credentials loaded successfully.")
+        # List of required columns
+        required_columns = ['Type','JBHost','JBPrivateIP','JBUsername','JBUserPwd', 'OraSchema', 'OraHost', 'OraPort', 'OraPass', 'OraService', 
+                            'PgDBName', 'PgHost', 'PgPort', 'PgPass', 'PgUser']
+
+        # Validate required columns
+        validate_columns_result = validate_columns(df, required_columns)
+        if validate_columns_result == 0:
+            # Save the data to a JSON file
+            json_data = df.to_json(orient='records', indent=4)
+            save_json_to_file(json_data, r"C:\Users\ginesysdevops\Desktop\migration_status\credentials.json")
+
+            # Load credentials based on the private IP address
+            credentials = load_credentials_from_json(private_ip)
+            
+            if credentials:
+                print(credentials)
+                print("Credentials loaded successfully.")
+            else:
+                print("No credentials found for the given IP.")
         else:
-            print("No credentials found for the given IP.")
+            print(validate_columns_result)
     except Exception as e:
         logging.error(f"Failed to complete the operation: {e}")
         print("An error occurred. Please check the logs for more details.")

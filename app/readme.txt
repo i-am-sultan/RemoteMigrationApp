@@ -1,3 +1,7 @@
+Note:
+change the credentials in schedule_jobs_in_postgres();
+make sure to disable all the triggers in templatedb
+
 How to start migration:
 
 1. Fill all the required credentials in the google sheet(Make sure it's the clone oracle VM only, not live ones :( )
@@ -26,10 +30,8 @@ P6: barcode ctrl file
 P7: jobs
 P8: report integration
 
-Note:
-change the credentials in schedule_jobs_in_postgres();
-
-
-Version 0.2.1:
-
-Barcode control incorporated.
+Version 0.2.1: Barcode control incorporated.
+Version 0.3.0: Report integration completed, credential.json formatted
+Version 0.3.3: Azure bug workarround
+Version 0.3.4: Live database dropping disabled. Migration type choosen from sheet only.
+Version 0.3.9: Google sheet validation added.

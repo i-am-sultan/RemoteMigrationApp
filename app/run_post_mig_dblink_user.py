@@ -8,6 +8,8 @@ import psycopg2
 import status_update
 import sys
 import json
+import google_sheet as gsheet
+
 
 patch_drill_path = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\patch_drill.sql'
 patch_live_path = r'C:\Program Files\edb\prodmig\remote-mig-app\app\post-mig-patches\patch_live.sql'
@@ -118,12 +120,18 @@ if __name__ == "__main__":
         status_content = json.load(status_file)
     if (status_content['Process'] == 'P4' and status_content['Status'] == 'O') or (status_content['Process'] == 'P4' and status_content['Status'] == 'F'):
         private_ip = get_private_ip()
+        all_credentials = gsheet.access_sheet()
+        gsheet.save_json_to_file(all_credentials, r'C:\Users\ginesysdevops\Desktop\migration_status\credentials.json')
         credentials = load_credentials_from_json(private_ip)
-        print(credentials)
-        postmig2_result = execute_sql_patch(credentials,sys.argv[1])
-        if postmig2_result:
-            status_update.update_status_in_file('P4','F',f'Execution of dblink and user creation failed. {postmig2_result}')
-        else:
-            status_update.update_status_in_file('P5','O','Postmigration patch 2(dblink, usermanagement) executed successfully, cube population started ...') 
+        print(credentials['migType'].lower())
+        print( sys.argv[1].lower())
+        if credentials['migType'].lower() == sys.argv[1].lower():
+            postmig2_result = execute_sql_patch(credentials,sys.argv[1])
+            if postmig2_result:
+                status_update.update_status_in_file('P4','F',f'Execution of dblink and user creation failed. {postmig2_result}')
+            else:
+                status_update.update_status_in_file('P5','O','Postmigration patch 2(dblink, usermanagement) executed successfully, cube population started ...') 
+        else :
+            status_update.update_status_in_file('P4','F',f'Execution of dblink and user creation failed. Migration type mismatch between google sheet {credentials['migType'].lower()} and runmode{sys.argv[1]}.')
     else:
         logging.info('Process and Status is not matching to run run_post_mig_dblink_user.py')

@@ -78,6 +78,7 @@ def updatepgCon(pgHost, pgPort, pgUser, pgPass, pgDbName, filepath):
         logging.info('pgCon updated successfully.')
     except Exception as e:
         logging.error(f'Error updating pgCon.txt: {e}', exc_info=True)
+        
 def updateSchema(oraSchema,filepath):
     try:
         with open(filepath, 'r') as f:
