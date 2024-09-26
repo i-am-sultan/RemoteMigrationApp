@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "robotic-sanctum-267805",
+  "private_key_id": "edc7fbce47b8f84050d9fe424b90c4e3f4ee07ab",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCheliZIlzboezu\nkAFQMsUcg20FHZGUAIkTD+tOIbi710IMozOi70FsC6PC4iWY8Dmg3P7D24vIbpnn\nM78tVPZY+hs/LI+b6GtE2tXFtz6af6ntkK10bjAjQoYCNhX2IQcC+ToJpVAlPNh2\nGc1HNd8OVj0VTvzYTReHFxY2SvfxBT81RwxCkXinauo7JreVMDHbmqmHAD47mMy4\ni9Ra6cGX72985OafStsQg4k5txrVCZwZCGFw8efFEIe+a/3ogYt6uTmh14Vop5n0\nxp1yFC5uUsTH1NyHASAqx5eLpCw4fYicdUMxfumdagjJU5ZCCUk5KNqet3lJdmEn\n8t7hYuafAgMBAAECggEATSPxZ1ZvHc1BLsZEmldmqrRuRF9XyGhpE14rfuvFIJc4\nymi8pj299yuoU9VNOL6qCRsJ6e7b3ChaBYVG8xT/iooQsiFLiaOCeyY/sXBUy+Ho\n/8B53IE3JeEFu9CytR4aB2WgQDNlEiT7E5BH7JjjsimojKFrULmjX7m7trwhrlWd\nBSPmCvf8hEnCjFQRNu8ebB66vrTBBwSFTegSHbMtcPkZck74XFsQ1hkorSrwzB4V\nbNyDbraebz+RQEX1mZNTLEFofC4I2JfUO89kbSb1kWh6+0AGIJ8vSL/PlvqkF6aj\nlZVs5o4adeUim6EF8s2pXBE9T3eiHSpSiHTbbX7kAQKBgQDQtKXMWeJXz8GHne22\nFO4bRK2vhLxLnX4ieY7KvWiU1+rC2g3lbaRjCIuGSGWbBRXP64Egzu+a4wY2aLAn\nHC4CV696mktq/SP8rMm5BkWe0PRU2GxrTgyCwwNM6glRJrZcZiyReKUIopBzbw+M\n7W2ThR87mXdhB60gSDhUmDbdHwKBgQDGEfDdqlwv0fO0qOC3XJq/Iu+q+e3dQvgO\n3dYl/Z7pqoqfp/i0PTu8N2DIcWc7yfF+1W6F+ofmdg6hiNQ5L3y9orCc3r2dGMq2\nmX9cF7iwtiTvRFMB+s0KMLpQItAtHQHKWZl+Xy0DMRT5yltPpxEHjjTqE/X/8uzf\nxqWsgtlGgQKBgHxg/GJBuwucC/kXnIAkDxb/Igd1MoZZ0L8Y9IlMwhPabdU8AIYX\nhp1ijUw0vyDYsfwcnPMBgHgtDhnE4B4exCivOyv04jdbr2O5UerLmxgf7UzXQh3d\nAMW5FLF01KKhUJLWbX8wiCISR8YTjQ/uu5vr/QYW2rdfzMRtZey8Xg3/AoGAN+yI\n3Y1kSfw1mySzjhIPfzgWA2hdyMNH1qq79C4P2FnWmg2LIxjG7PWV1gJu62qxTOZm\nNl3uURu0Nde0VBEcX064HxKk5t5BHh1o4E+yTfKfqw7XgQ+XJPFtKYMq1BIEl2WE\n+TFWPDh3e6+u6GZ7YG6+cfkA1Ct6xhQIYxTu1AECgYBexS8159zhJAVue0fXo/MU\nYqb7xxPN1egMbe9E/uWpm3h2YBD/LzW+D1ABu2bk0F4B08rNFWqonLYFtUZJBAkT\n6i2aHmegPS1jBn7KPVW+c1wBn/PpzJUG7MuKkV7oJEzd9clu+2nkLisg0iGEXoBN\np4ZYht7GmAGUAnygpFwcng==\n-----END PRIVATE KEY-----\n",
+  "client_email": "soumik-service-acc@robotic-sanctum-267805.iam.gserviceaccount.com",
+  "client_id": "106246024554588829985",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/soumik-service-acc%40robotic-sanctum-267805.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

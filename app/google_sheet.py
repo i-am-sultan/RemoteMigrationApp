@@ -30,7 +30,7 @@ def access_sheet(retries=10, wait_time=30):
     # Define the scope and credentials
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name(
-        r'C:\Program Files\edb\prodmig\remote-mig-app\app\project-remote-migration-app-d57c81bf8332.json', scope
+        r'C:\Program Files\edb\prodmig\remote-mig-app\app\robotic-sanctum-267805-edc7fbce47b8.json', scope
     )
     client = gspread.authorize(creds)
     
@@ -55,6 +55,7 @@ def access_sheet(retries=10, wait_time=30):
             logging.error(f"An unexpected error occurred while accessing the sheet: {e}")
             raise
     raise Exception("Failed to access Google Sheet after several retries.")
+
 
 def load_credentials_from_excel(excel_df, remoteip):
     credentials = {}
@@ -111,7 +112,7 @@ def validate_columns(json_data, required_columns):
     #         # raise Exception(f"Null or empty values found in column: {column}")
     #         return f"Null or empty values found in column: {column}"
     # logging.info("All required columns are present and contain no null values.")
-    return 0
+
 
 def validate_json_credentials(credentials):
     try:
@@ -192,24 +193,26 @@ if __name__ == "__main__":
     print(f"Private IP: {private_ip}")
 
     try:
-        # Access Google Sheet and get data as DataFrame
-        df = access_sheet()
+        # Access Google Sheet and get data as json
+        json_data = access_sheet()
+        print(json_data)
 
         # List of required columns
         required_columns = ['Type','JBHost','JBPrivateIP','JBUsername','JBUserPwd', 'OraSchema', 'OraHost', 'OraPort', 'OraPass', 'OraService', 
                             'PgDBName', 'PgHost', 'PgPort', 'PgPass', 'PgUser']
 
         # Validate required columns
-        validate_columns_result = validate_columns(df, required_columns)
+        validate_columns_result = validate_columns(json_data, required_columns)
         if validate_columns_result == 0:
             # Save the data to a JSON file
-            json_data = df.to_json(orient='records', indent=4)
+            
             current_user = os.getenv('USERNAME')
             status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\credentials.json'
             save_json_to_file(json_data, status_file_path)
 
             # Load credentials based on the private IP address
             credentials = load_credentials_from_json(private_ip)
+            print(credentials)
             
             if credentials:
                 print(credentials)
