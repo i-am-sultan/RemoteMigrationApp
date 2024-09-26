@@ -115,13 +115,17 @@ def execute_sql_patch(credentials, patch_choice):
         return f"'{e}'"
 
 if __name__ == "__main__":
-    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    current_user = os.getenv('USERNAME')
+    status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
     if (status_content['Process'] == 'P4' and status_content['Status'] == 'O') or (status_content['Process'] == 'P4' and status_content['Status'] == 'F'):
         private_ip = get_private_ip()
         all_credentials = gsheet.access_sheet()
-        gsheet.save_json_to_file(all_credentials, r'C:\Users\ginesysdevops\Desktop\migration_status\credentials.json')
+        
+        credentials_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\credentials.json'
+        gsheet.save_json_to_file(all_credentials,credentials_file_path)
+
         credentials = load_credentials_from_json(private_ip)
         print(credentials['migType'].lower())
         print( sys.argv[1].lower())

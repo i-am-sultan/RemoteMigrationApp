@@ -1,9 +1,11 @@
 import logging
 import json
+import os
+
+current_user = os.getenv('USERNAME')
 
 def update_status_in_file(process_id, status, status_message):
-    filepath = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
-    # filepath = r'C:\Users\sultan.m\Desktop\migration_status\status.json'
+    filepath = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\status.json'
     try:
         with open(filepath,'r') as file:
             content = json.load(file)
@@ -21,7 +23,7 @@ def update_status_in_file(process_id, status, status_message):
         logging.error(f'Error updating config.json: {e}', exc_info=True)
 
 def update_status_in_file_for_postmigration(process_id, status, status_message, postmigration_status):
-    filepath = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    filepath = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\status.json'
     try:
         with open(filepath,'r') as file:
             content = json.load(file)

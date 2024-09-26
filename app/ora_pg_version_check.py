@@ -45,9 +45,12 @@ def compare_versions(credentials):
         return msg
 
 if __name__ == "__main__":
-    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    current_user = os.getenv('USERNAME')
+    # status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
+        
     if status_content['Process'] == 'P1' and status_content['Status'] == 'O':
         private_ip = get_private_ip()
         credentials = load_credentials_from_json(private_ip)

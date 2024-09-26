@@ -2,8 +2,9 @@ import os
 import logging
 import socket
 import sys
+current_user = os.getenv('USERNAME')
 
-log_dir = r'C:\Users\ginesysdevops\Desktop\migration_status'
+log_dir = f'C:\\Users\\{current_user}\\Desktop\\migration_status'
 
 file = f'test_{socket.gethostname()}.log'
 

@@ -9,6 +9,12 @@ from google_sheet import *
 from log_sheet import *
 import status_update
 
+
+
+# Get current logged-in user
+current_user = os.getenv('USERNAME')
+
+
 # File Paths
 ORACON_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\OraCon.txt'
 PGCON_PATH = r'C:\Program Files\edb\prodmig\RunCMDEdb_New\netcoreapp3.1\pgCon.txt'
@@ -143,7 +149,10 @@ def copyFiles(destination_dir):
         return False
 
 if __name__ == "__main__":
-    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    
+    status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\status.json'
+    print(status_file_path)
+
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
     if status_content['Process'] == 'P1' and status_content['Status'] == 'O':

@@ -92,7 +92,8 @@ def run_cube_population(credentials):
     return results
 
 if __name__ == '__main__':
-    status_file_path = r'C:\Users\ginesysdevops\Desktop\migration_status\status.json'
+    current_user = os.getenv('USERNAME')
+    status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\status.json'
     with open(status_file_path,'r') as status_file:
         status_content = json.load(status_file)
     if (status_content['Process'] == 'P5' and status_content['Status'] == 'O') or (status_content['Process'] == 'P5' and status_content['Status'] == 'F'):

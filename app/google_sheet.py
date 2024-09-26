@@ -146,8 +146,9 @@ def validate_json_credentials(credentials):
     
 def load_credentials_from_json(remoteip):
     try:
-        with open(r"C:\Users\ginesysdevops\Desktop\migration_status\credentials.json", 'r') as jsonfile:
-        # with open(r"C:\Users\sultan.m\Desktop\migration_status\credentials.json", 'r') as jsonfile:
+        current_user = os.getenv('USERNAME')
+        status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\credentials.json'
+        with open(status_file_path, 'r') as jsonfile:
             content = json.load(jsonfile)
             for entry in content:
                 if entry.get('JBPrivateIP') == remoteip:
@@ -203,7 +204,9 @@ if __name__ == "__main__":
         if validate_columns_result == 0:
             # Save the data to a JSON file
             json_data = df.to_json(orient='records', indent=4)
-            save_json_to_file(json_data, r"C:\Users\ginesysdevops\Desktop\migration_status\credentials.json")
+            current_user = os.getenv('USERNAME')
+            status_file_path = f'C:\\Users\\{current_user}\\Desktop\\migration_status\\credentials.json'
+            save_json_to_file(json_data, status_file_path)
 
             # Load credentials based on the private IP address
             credentials = load_credentials_from_json(private_ip)
